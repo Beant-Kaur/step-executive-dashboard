@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/step_executive_dashboard", "destination": "/step_executive_dashboard.html" }
+  ]
+}
