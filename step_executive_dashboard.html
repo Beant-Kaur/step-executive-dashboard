@@ -291,15 +291,11 @@
       border-color: var(--earth-gold-text);
     }
 
-    .btn-header-action.btn-install {
-      background: var(--eco-forest);
-      border-color: var(--eco-forest);
-      color: #FFFFFF;
-    }
-
-    .btn-header-action.btn-install:hover {
-      background: var(--eco-emerald);
-      border-color: var(--eco-emerald);
+    .btn-header-action.btn-theme {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      flex-shrink: 0;
     }
 
     .btn-header-action.btn-sync {
@@ -978,12 +974,9 @@
       .header-actions-right {
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px;
+        align-items: center;
         gap: 6px;
-      }
-
-      .header-actions-right.has-install {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .btn-header-action {
@@ -993,6 +986,12 @@
         font-size: 12px;
         min-height: 36px;
         min-width: 0;
+      }
+
+      .btn-header-action.btn-theme {
+        width: 36px;
+        height: 36px;
+        padding: 0;
       }
 
       .filter-bar-left {
@@ -1271,16 +1270,9 @@
             <span>Raw Data</span>
           </button>
 
-          <!-- PWA Install App Button (shown when browser supports install prompt) -->
-          <button class="btn-header-action btn-install" onclick="promptInstallPWA()" id="btnInstallPwa" style="display:none;" title="Install Executive Dashboard as an App">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-            <span>Install App</span>
-          </button>
-
-          <!-- Light / Dark Toggle -->
-          <button class="btn-header-action" onclick="toggleTheme()" id="themeBtn" title="Toggle Light / Dark mode">
-            <svg id="themeIcon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            <span id="themeText">Dark</span>
+          <!-- Light / Dark Icon Toggle -->
+          <button class="btn-header-action btn-theme" onclick="toggleTheme()" id="themeBtn" title="Switch to dark mode" aria-label="Switch to dark mode">
+            <svg id="themeIcon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           </button>
         </div>
       </div>
@@ -1477,7 +1469,6 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7jRShRcyv3nJcogTQkweMlWIEvi9PQq9h9NQzhLmSkuTk1RJ-SlDFfipnie4xoTywSXKgjbgpFX-W/pub?output=csv';
     const PWA_CSV_CACHE_KEY = 'step_live_csv_cache_v1';
     let latestRawCSV = null;
-    let deferredInstallPrompt = null;
 
     // Register PWA Service Worker (works on http://localhost, Vercel, GitHub Pages)
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
@@ -1486,36 +1477,6 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           console.warn('Service Worker registration skipped:', err);
         });
       });
-    }
-
-    function setInstallButtonVisible(visible) {
-      const installBtn = document.getElementById('btnInstallPwa');
-      const actionsWrap = document.getElementById('headerActionsRight');
-      if (installBtn) installBtn.style.display = visible ? 'inline-flex' : 'none';
-      if (actionsWrap) actionsWrap.classList.toggle('has-install', !!visible);
-    }
-
-    // Handle Mobile / Desktop PWA Install Prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredInstallPrompt = e;
-      setInstallButtonVisible(true);
-    });
-
-    window.addEventListener('appinstalled', () => {
-      deferredInstallPrompt = null;
-      setInstallButtonVisible(false);
-      showToast('App installed on your device', 'success');
-    });
-
-    async function promptInstallPWA() {
-      if (!deferredInstallPrompt) return;
-      deferredInstallPrompt.prompt();
-      const { outcome } = await deferredInstallPrompt.userChoice;
-      if (outcome === 'accepted') {
-        deferredInstallPrompt = null;
-        setInstallButtonVisible(false);
-      }
     }
 
     function buildCSVFromDATA() {
@@ -1733,9 +1694,13 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     function toggleTheme() {
       document.body.classList.toggle('dark-mode');
       const isDark = document.body.classList.contains('dark-mode');
-      const themeText = document.getElementById('themeText');
+      const themeBtn = document.getElementById('themeBtn');
       const themeIcon = document.getElementById('themeIcon');
-      if (themeText) themeText.textContent = isDark ? 'Light' : 'Dark';
+      if (themeBtn) {
+        const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+        themeBtn.setAttribute('title', label);
+        themeBtn.setAttribute('aria-label', label);
+      }
       if (themeIcon) {
         themeIcon.innerHTML = isDark
           ? '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>'

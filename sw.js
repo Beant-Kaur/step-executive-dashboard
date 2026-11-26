@@ -1,4 +1,4 @@
-const CACHE_NAME = 'step-kpi-pwa-v2';
+const CACHE_NAME = 'step-kpi-pwa-v3';
 const LOCAL_ASSETS = [
   './',
   './index.html',
