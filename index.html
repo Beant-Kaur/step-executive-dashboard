@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#137547">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="STEP KPI">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Executive Performance Dashboard | STEP & InnovaBeyond Digital</title>
   <!-- Standard Fonts: Inter & Segoe UI -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,6 +72,12 @@
       padding: 0;
     }
 
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       background: var(--bg);
       color: var(--text-main);
@@ -75,6 +89,7 @@
     }
 
     .dashboard-container {
+      width: 100%;
       max-width: 1520px;
       margin: 0 auto;
       padding: 16px 22px 40px;
@@ -209,15 +224,40 @@
       border-color: var(--eco-forest);
     }
 
-    .btn-header-action.btn-upload {
-      border-color: rgba(178, 154, 75, 0.45);
+    .btn-header-action.btn-download {
+      border-color: rgba(178, 154, 75, 0.55);
+      color: #8C7323;
+      font-weight: 600;
+    }
+
+    .btn-header-action.btn-download:hover {
+      background: var(--earth-gold-soft);
+      border-color: var(--earth-gold);
+      color: #6B5614;
+    }
+
+    body.dark-mode .btn-header-action.btn-download {
+      border-color: rgba(197, 160, 89, 0.5);
       color: var(--earth-gold-light);
     }
 
-    .btn-header-action.btn-upload:hover {
-      background: var(--earth-gold-soft);
-      border-color: var(--earth-gold);
+    body.dark-mode .btn-header-action.btn-download:hover {
+      background: rgba(197, 160, 89, 0.14);
+      border-color: var(--earth-gold-light);
       color: var(--earth-gold-light);
+    }
+
+    .btn-header-action.btn-install {
+      background: var(--eco-forest);
+      border-color: var(--eco-forest);
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    .btn-header-action.btn-install:hover {
+      background: var(--eco-emerald);
+      border-color: var(--eco-emerald);
+      color: #FFFFFF;
     }
 
     .btn-header-action.btn-sync {
@@ -507,17 +547,19 @@
     /* Main Chart Grid */
     .grid-row {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: 16px;
       margin-bottom: 16px;
+      min-width: 0;
     }
 
     .grid-2-col {
-      grid-template-columns: 1.7fr 1.1fr;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.1fr);
     }
 
     @media (max-width: 992px) {
       .grid-2-col {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
@@ -529,6 +571,8 @@
       box-shadow: var(--card-shadow);
       display: flex;
       flex-direction: column;
+      min-width: 0;
+      max-width: 100%;
     }
 
     .card-top {
@@ -569,26 +613,42 @@
       flex-wrap: wrap;
     }
 
-    .chip-btn {
+    .chip-btn,
+    .channel-chip {
       background: var(--bg);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 4px 9px;
+      padding: 4px 10px;
       font-size: 11px;
       font-weight: 600;
       border-radius: 4px;
       cursor: pointer;
+      font-family: var(--font);
       transition: all 0.15s;
     }
 
-    .chip-btn:hover {
+    .chip-btn:hover,
+    .channel-chip:hover {
       color: var(--text-main);
+      border-color: var(--eco-forest);
     }
 
-    .chip-btn.active {
+    .chip-btn.active,
+    .channel-chip.active {
       background: var(--eco-forest);
       color: #FFFFFF;
       border-color: var(--eco-forest);
+    }
+
+    .chart-scroll-wrap {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      position: relative;
+    }
+
+    .mobile-swipe-hint {
+      display: none;
     }
 
     .chart-canvas-box {
@@ -760,6 +820,255 @@
     body.dark-mode .footer-link {
       color: var(--eco-mint);
     }
+
+    /* MOBILE & TABLET PWA RESPONSIVE LAYOUT */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 10px 12px calc(28px + env(safe-area-inset-bottom));
+      }
+
+      .dashboard-header {
+        padding: 12px;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .header-top-row {
+        gap: 10px;
+      }
+
+      .brand-identity {
+        gap: 10px;
+        width: 100%;
+      }
+
+      .brand-logo-img {
+        height: 38px;
+        max-width: 96px;
+      }
+
+      .brand-title {
+        font-size: 14.5px;
+        line-height: 1.25;
+      }
+
+      .brand-subtitle {
+        font-size: 10px;
+      }
+
+      .header-actions-right {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .btn-header-action {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 7px 10px;
+        font-size: 11.5px;
+        min-height: 34px;
+      }
+
+      .filter-bar-left {
+        gap: 8px;
+        padding-top: 10px;
+      }
+
+      .filters-left-cluster {
+        width: 100%;
+        gap: 8px;
+      }
+
+      .brand-slicer-nav {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 3px;
+      }
+
+      .brand-slicer-btn {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 7px 4px;
+        font-size: 10.5px;
+        line-height: 1.2;
+        white-space: normal;
+        gap: 2px;
+        min-height: 40px;
+        min-width: 0;
+      }
+
+      .period-slicer {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) repeat(4, minmax(0, 1fr));
+        gap: 2px;
+      }
+
+      .period-btn {
+        padding: 6px 2px;
+        font-size: 11px;
+        text-align: center;
+        white-space: nowrap;
+        min-height: 32px;
+        min-width: 0;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .kpi-box {
+        padding: 12px;
+        min-width: 0;
+      }
+
+      .kpi-name {
+        font-size: 10.5px;
+      }
+
+      .kpi-number {
+        font-size: 22px;
+      }
+
+      .kpi-tagline {
+        font-size: 10.5px;
+      }
+
+      .kpi-compare-box {
+        padding: 11px 10px;
+        min-width: 0;
+      }
+
+      .compare-card-title {
+        font-size: 10px;
+        margin-bottom: 6px;
+        padding-bottom: 5px;
+      }
+
+      .compare-values-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 6px;
+      }
+
+      .compare-brand-badge {
+        font-size: 9.5px;
+      }
+
+      .compare-number {
+        font-size: 17.5px;
+      }
+
+      .grid-row {
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .dashboard-card {
+        padding: 13px 12px;
+      }
+
+      .card-top {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        gap: 8px;
+      }
+
+      .card-heading {
+        font-size: 13.5px;
+      }
+
+      .chip-group {
+        width: 100%;
+        gap: 5px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .channel-chip {
+        white-space: nowrap;
+        flex-shrink: 0;
+        min-height: 30px;
+        padding: 5px 10px;
+      }
+
+      .chart-scroll-wrap {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+      }
+
+      .chart-canvas-box.weekly-scrollable {
+        min-width: 780px;
+        height: 295px;
+      }
+
+      .chart-canvas-box-tall.weekly-scrollable {
+        min-width: 600px;
+        height: 295px;
+      }
+
+      .chart-canvas-box.webinar-scrollable {
+        min-width: 520px;
+        height: 245px;
+      }
+
+      .mobile-swipe-hint {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        font-size: 10px;
+        color: var(--text-dim);
+        margin-top: 4px;
+        font-weight: 500;
+      }
+
+      .donut-wrap {
+        height: 240px;
+      }
+
+      .donut-center-metric .number {
+        font-size: 21px;
+      }
+
+      .upload-toast {
+        left: 12px;
+        right: 12px;
+        top: 12px;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .dashboard-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+        padding-top: 14px;
+        margin-top: 16px;
+      }
+    }
+
+    @media (max-width: 374px) {
+      .brand-slicer-btn {
+        font-size: 10px;
+        padding: 6px 2px;
+      }
+
+      .compare-number {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -787,6 +1096,18 @@
           <button class="btn-header-action btn-sync" onclick="syncGoogleSheetData(true)" id="btnGoogleSync" title="Sync live updates from Google Sheet">
             <svg id="syncIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
             <span id="syncText">Sync Live Sheet</span>
+          </button>
+
+          <!-- Download Raw Data File Button -->
+          <button class="btn-header-action btn-download" onclick="downloadRawDataCSV()" id="btnDownloadRaw" title="Download raw KPI CSV data file">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Raw Data</span>
+          </button>
+
+          <!-- PWA Install App Button (shown when browser supports install prompt) -->
+          <button class="btn-header-action btn-install" onclick="promptInstallPWA()" id="btnInstallPwa" style="display:none;" title="Install Executive Dashboard as an App">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <span>Install App</span>
           </button>
 
           <!-- Light / Dark Toggle -->
@@ -845,9 +1166,12 @@
             <!-- Dynamically populated chips -->
           </div>
         </div>
-        <div class="chart-canvas-box">
-          <canvas id="growthChart"></canvas>
+        <div class="chart-scroll-wrap">
+          <div class="chart-canvas-box weekly-scrollable" id="growthChartBox">
+            <canvas id="growthChart"></canvas>
+          </div>
         </div>
+        <div class="mobile-swipe-hint" id="growthSwipeHint">← Swipe horizontally to explore all weeks →</div>
       </div>
 
       <!-- Chart 2: Channel Mix / Distribution Donut -->
@@ -890,9 +1214,12 @@
           <div class="card-heading">STEP Subscriber Growth by Category</div>
           <span style="font-size:11.5px; color:var(--text-muted);">Healthy, Passive, Unengaged & Inactive</span>
         </div>
-        <div class="chart-canvas-box-tall">
-          <canvas id="subscriberTrendChart"></canvas>
+        <div class="chart-scroll-wrap">
+          <div class="chart-canvas-box-tall weekly-scrollable" id="subscriberTrendBox">
+            <canvas id="subscriberTrendChart"></canvas>
+          </div>
         </div>
+        <div class="mobile-swipe-hint" id="subSwipeHint">← Swipe horizontally to explore all weeks →</div>
       </div>
 
       <!-- Subscriber List Health Composition Donut -->
@@ -925,9 +1252,12 @@
             Registrations & Attendees
           </span>
         </div>
-        <div class="chart-canvas-box" style="height:250px;">
-          <canvas id="webinarMonthlyChart"></canvas>
+        <div class="chart-scroll-wrap">
+          <div class="chart-canvas-box webinar-scrollable" id="webinarChartBox" style="height:250px;">
+            <canvas id="webinarMonthlyChart"></canvas>
+          </div>
         </div>
+        <div class="mobile-swipe-hint" id="webinarSwipeHint">← Swipe horizontally to compare all months →</div>
       </div>
     </div>
 
@@ -975,6 +1305,113 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
     // Google Sheets Live Endpoint
     const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7jRShRcyv3nJcogTQkweMlWIEvi9PQq9h9NQzhLmSkuTk1RJ-SlDFfipnie4xoTywSXKgjbgpFX-W/pub?output=csv';
+    const PWA_CSV_CACHE_KEY = 'step_live_csv_cache_v1';
+    let latestRawCSV = null;
+    let deferredInstallPrompt = null;
+
+    // Register PWA Service Worker (works on http://localhost, Vercel, GitHub Pages)
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((err) => {
+          console.warn('Service Worker registration skipped:', err);
+        });
+      });
+    }
+
+    // Handle Mobile / Desktop PWA Install Prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const installBtn = document.getElementById('btnInstallPwa');
+      if (installBtn) installBtn.style.display = 'inline-flex';
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      const installBtn = document.getElementById('btnInstallPwa');
+      if (installBtn) installBtn.style.display = 'none';
+      showToast('✓ App installed successfully on your device!', 'success');
+    });
+
+    async function promptInstallPWA() {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      if (outcome === 'accepted') {
+        deferredInstallPrompt = null;
+        const installBtn = document.getElementById('btnInstallPwa');
+        if (installBtn) installBtn.style.display = 'none';
+      }
+    }
+
+    function buildCSVFromDATA() {
+      const lines = [];
+      const q = (v) => {
+        const s = v === null || v === undefined ? '' : String(v);
+        return (s.includes(',') || s.includes('"') || s.includes('\n')) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      };
+      const tl = DATA.timeline || [];
+      const monthRow = [''];
+      let prevMonth = '';
+      tl.forEach((t) => {
+        if (t.month !== prevMonth) {
+          monthRow.push(t.month);
+          prevMonth = t.month;
+        } else {
+          monthRow.push('');
+        }
+      });
+      const weekRow = [''].concat(tl.map(t => t.week));
+      lines.push(['Social Channels', 'Weekly KPIS'].map(q).join(','));
+      lines.push(monthRow.map(q).join(','));
+      lines.push(weekRow.map(q).join(','));
+
+      const orderedChannels = [
+        'STEP LinkedIn', 'STEP Contacts', 'STEP Total Subscribers',
+        'Healthy contacts', 'Passive Contacts', 'Unengaged Contacts', 'Inactive contacts',
+        'STEP YouTube', 'STEP Facebook', 'STEP Instagram',
+        'Innova LinkedIn', 'Innova Instagram', 'Innova YouTube', 'Innova Facebook'
+      ];
+      orderedChannels.forEach((ch) => {
+        const arr = (DATA.channels && DATA.channels[ch]) || [];
+        const vals = tl.map((_, idx) => (arr[idx] !== null && arr[idx] !== undefined ? arr[idx] : ''));
+        lines.push([ch].concat(vals).map(q).join(','));
+      });
+
+      const web = DATA.webinars_monthly;
+      if (web && web.months && web.months.length) {
+        lines.push('');
+        lines.push('Webinar Monthly KPIs');
+        lines.push([''].concat(web.months).map(q).join(','));
+        lines.push(['Webinar Registrations'].concat(web.registrations).map(q).join(','));
+        lines.push(['Webinar Participants'].concat(web.participants).map(q).join(','));
+      }
+      return lines.join('\r\n');
+    }
+
+    function downloadRawDataCSV() {
+      try {
+        const csvContent = latestRawCSV || localStorage.getItem(PWA_CSV_CACHE_KEY) || buildCSVFromDATA();
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const blobUrl = URL.createObjectURL(blob);
+        const dateTag = new Date().toISOString().slice(0, 10);
+        const filename = 'STEP_Innova_KPI_Raw_Data_' + dateTag + '.csv';
+
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+        showToast('✓ Raw data file downloaded (' + filename + ')', 'success');
+      } catch (err) {
+        console.error('Download failed:', err);
+        showToast('⚠️ Could not download raw data file: ' + err.message, 'error');
+      }
+    }
 
     // Auto-bridge: If opened via file://, seamless jump to http://localhost:8000 where browser allows live Google sync!
     if (window.location.protocol === 'file:') {
@@ -992,6 +1429,17 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const cachedCsv = localStorage.getItem(PWA_CSV_CACHE_KEY);
+        if (cachedCsv) {
+          latestRawCSV = cachedCsv;
+          const cachedRows = parseCSVText(cachedCsv);
+          if (cachedRows && cachedRows.length > 3) {
+            processParsedMatrix(cachedRows, 'PWA Offline Cache', false);
+          }
+        }
+      } catch (e) {}
+
       updateBrandView();
       // Auto-fetch live data from Google Sheet on page load
       syncGoogleSheetData(false);
@@ -1031,7 +1479,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
       }
 
-      // Running from http:// (e.g. http://localhost:8000)
+      // Running from http:// or https:// (localhost, Vercel, GitHub Pages, or PWA)
       try {
         const cacheBusterUrl = GOOGLE_SHEET_CSV_URL + '&_cb=' + Date.now();
         const response = await fetch(cacheBusterUrl, { cache: 'no-store' });
@@ -1041,6 +1489,9 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
 
         const csvText = await response.text();
+        latestRawCSV = csvText;
+        try { localStorage.setItem(PWA_CSV_CACHE_KEY, csvText); } catch (e) {}
+
         const rows = parseCSVText(csvText);
 
         processParsedMatrix(rows, 'Google Sheet (Live)', showUserToast);
@@ -1054,9 +1505,13 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           showToast('✓ Live data successfully synced from Google Sheets (' + DATA.timeline.length + ' weeks loaded)!', 'success');
         }
       } catch (err) {
-        console.warn('Could not auto-sync from Google Sheets (using local data):', err);
+        console.warn('Could not auto-sync from Google Sheets (using local/cached data):', err);
+        const note = document.getElementById('headerStatusNote');
+        if (note && (latestRawCSV || localStorage.getItem(PWA_CSV_CACHE_KEY))) {
+          note.innerHTML = '🟡 <span style="color:var(--earth-gold); font-weight:600;">Offline PWA Mode</span> • ' + DATA.timeline.length + ' Weeks (Cached)';
+        }
         if (showUserToast) {
-          showToast('⚠️ Sync failed: ' + err.message + '. Showing local data.', 'warning');
+          showToast('⚠️ Offline or unreachable: showing latest cached data.', 'warning');
         }
       } finally {
         if (syncIcon) syncIcon.classList.remove('spinning');
@@ -1079,6 +1534,8 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const isDark = document.body.classList.contains('dark-mode');
       const themeText = document.getElementById('themeText');
       if (themeText) themeText.textContent = isDark ? 'Light' : 'Dark';
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) themeMeta.setAttribute('content', isDark ? '#0D1915' : '#137547');
       refreshAllCharts();
     }
 
@@ -1357,6 +1814,13 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       };
     }
 
+    function syncMobileChartScroll(boxId, hintId, className, enableScroll) {
+      const box = document.getElementById(boxId);
+      if (box) box.classList.toggle(className, enableScroll);
+      const hint = document.getElementById(hintId);
+      if (hint) hint.style.display = enableScroll ? '' : 'none';
+    }
+
     function hideDonutTooltip(canvas) {
       const wrap = canvas && canvas.closest ? canvas.closest('.donut-wrap') : null;
       const tip = wrap ? wrap.querySelector('.donut-ext-tooltip') : null;
@@ -1517,6 +1981,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const [start, end] = periodSlices[currentPeriod] || [0, DATA.timeline.length];
       const sliceLabels = DATA.labels.slice(start, end);
+      syncMobileChartScroll('growthChartBox', 'growthSwipeHint', 'weekly-scrollable', sliceLabels.length > 14);
       const colors = getThemeColors();
 
       let datasets = [];
@@ -1704,6 +2169,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const colors = getThemeColors();
       const sub = DATA.subscribers_deepdive;
+      syncMobileChartScroll('subscriberTrendBox', 'subSwipeHint', 'weekly-scrollable', sub.labels.length > 14);
 
       subscriberTrendChart = new Chart(ctx, {
         type: 'line',
@@ -1802,6 +2268,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const [mStart, mEnd] = web.quarter_ranges[currentPeriod] || [0, 11];
 
       const slicedMonths = web.months.slice(mStart, mEnd);
+      syncMobileChartScroll('webinarChartBox', 'webinarSwipeHint', 'webinar-scrollable', slicedMonths.length > 5);
       const slicedReg = web.registrations.slice(mStart, mEnd);
       const slicedPart = web.participants.slice(mStart, mEnd);
       const slicedRates = web.rates.slice(mStart, mEnd);
