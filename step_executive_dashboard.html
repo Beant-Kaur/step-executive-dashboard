@@ -12,10 +12,10 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Executive Performance Dashboard | STEP & InnovaBeyond Digital</title>
-  <!-- Standard Fonts: Inter & Segoe UI -->
+  <!-- Editorial & Tabular Typography: IBM Plex Sans + IBM Plex Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Chart.js 4.4 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <!-- SheetJS for local Excel/CSV reading in browser -->
@@ -29,47 +29,73 @@
       --eco-pine: #0B4637;
       --eco-leaf: #2D6A4F;
       --eco-mint: #52B788;
-      
+
       /* Official Warm Earth Gold Accent (step.mykajabi.com & Innova Beyond) */
       --earth-gold: #B29A4B;
       --earth-gold-light: #C5A059;
+      --earth-gold-text: #725814;
       --earth-gold-soft: rgba(178, 154, 75, 0.12);
 
-      /* Clean Crisp Executive Light Canvas (Default) */
-      --bg: #F5F9F6;
+      /* Botanical Paper Neutral Ramp (Light Default) */
+      --bg: #F6F7F4;
       --card-bg: #FFFFFF;
-      --card-border: #E0EBE4;
-      --card-shadow: 0 3px 14px rgba(19, 117, 71, 0.04);
-      --card-hover-shadow: 0 6px 20px rgba(19, 117, 71, 0.08);
+      --surface-raised: #EFF2ED;
+      --card-border: rgba(22, 34, 29, 0.10);
+      --card-border-strong: rgba(22, 34, 29, 0.18);
+      --card-shadow: 0 1px 2px rgba(15, 23, 19, 0.04);
+      --card-hover-shadow: 0 4px 12px rgba(15, 23, 19, 0.06);
 
       --header-bg: #FFFFFF;
-      --header-border: #E0EBE4;
-      
-      --text-main: #182B24;
-      --text-muted: #5C776B;
-      --text-dim: #8FA69B;
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --header-border: rgba(22, 34, 29, 0.10);
+
+      --text-main: #16221D;
+      --text-muted: #43574E;
+      --text-dim: #53685F;
+
+      --scrollbar-thumb: rgba(22, 34, 29, 0.22);
+      --radius-card: 12px;
+      --radius-control: 8px;
+      --radius-pill: 6px;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+      --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
     body.dark-mode {
-      --bg: #09120F;
-      --card-bg: #101E1A;
-      --card-border: #183027;
-      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
-      --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+      --bg: #0D1412;
+      --card-bg: #131D19;
+      --surface-raised: #1B2823;
+      --card-border: rgba(235, 244, 240, 0.10);
+      --card-border-strong: rgba(235, 244, 240, 0.18);
+      --card-shadow: none;
+      --card-hover-shadow: none;
 
-      --header-bg: #0D1915;
-      --header-border: #183027;
-      
-      --text-main: #F1F7F4;
-      --text-muted: #8EABA0;
-      --text-dim: #547366;
+      --header-bg: #111A17;
+      --header-border: rgba(235, 244, 240, 0.10);
+
+      --text-main: #EDF2EF;
+      --text-muted: #A4BAB0;
+      --text-dim: #8AA398;
+      --earth-gold-text: #D6B76C;
+      --earth-gold-soft: rgba(214, 183, 108, 0.14);
+      --scrollbar-thumb: rgba(235, 244, 240, 0.22);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    ::selection {
+      background: rgba(19, 117, 71, 0.18);
+      color: var(--text-main);
+    }
+
+    body.dark-mode ::selection {
+      background: rgba(82, 183, 136, 0.28);
+      color: #FFFFFF;
     }
 
     html,
@@ -82,25 +108,36 @@
       background: var(--bg);
       color: var(--text-main);
       font-family: var(--font);
-      font-size: 13.5px;
+      font-size: 14px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      transition: background 0.2s, color 0.2s;
+      transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out);
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--eco-forest);
+      outline-offset: 2px;
+    }
+
+    body.dark-mode button:focus-visible,
+    body.dark-mode a:focus-visible {
+      outline-color: var(--eco-mint);
     }
 
     .dashboard-container {
       width: 100%;
       max-width: 1520px;
       margin: 0 auto;
-      padding: 16px 22px 40px;
+      padding: 20px 24px 48px;
     }
 
     /* Top Executive Header Bar */
     .dashboard-header {
       background: var(--header-bg);
       border: 1px solid var(--header-border);
-      border-radius: 8px;
-      padding: 14px 20px;
+      border-radius: 14px;
+      padding: 16px 20px;
       margin-bottom: 16px;
       box-shadow: var(--card-shadow);
       display: flex;
@@ -120,52 +157,51 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      min-width: 0;
     }
 
-    /* INTERACTIVE LOGO LINK (Requirement 2) */
     .logo-link {
       display: inline-flex;
       align-items: center;
       text-decoration: none;
-      border-radius: 6px;
-      padding: 3px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
+      border-radius: var(--radius-control);
+      padding: 2px;
+      transition: opacity 150ms var(--ease-out);
+      flex-shrink: 0;
       cursor: pointer;
     }
 
     .logo-link:hover {
-      transform: scale(1.06);
-      filter: drop-shadow(0 4px 12px rgba(19, 117, 71, 0.3));
+      opacity: 0.85;
     }
 
     .logo-link:active {
-      transform: scale(0.98);
-    }
-
-    body.dark-mode .logo-link:hover {
-      filter: drop-shadow(0 4px 14px rgba(82, 183, 136, 0.4));
+      opacity: 0.72;
     }
 
     .brand-logo-img {
-      height: 48px;
+      height: 44px;
       width: auto;
-      max-width: 130px;
+      max-width: 124px;
       object-fit: contain;
-      border-radius: 4px;
+      border-radius: 6px;
       display: block;
     }
 
     .brand-text {
       display: flex;
       flex-direction: column;
+      gap: 2px;
+      min-width: 0;
     }
 
     .brand-title {
       font-size: 18px;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-main);
-      line-height: 1.2;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      text-wrap: balance;
     }
 
     .brand-link {
@@ -173,7 +209,7 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      transition: color 0.15s;
+      transition: color 150ms var(--ease-out);
     }
 
     .brand-link:hover {
@@ -185,11 +221,10 @@
     }
 
     .brand-subtitle {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--eco-forest);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--eco-leaf);
+      line-height: 1.3;
     }
 
     body.dark-mode .brand-subtitle {
@@ -200,87 +235,92 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .btn-header-action {
-      background: transparent;
+      background: var(--surface-raised);
       border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
+      color: var(--text-main);
+      padding: 7px 13px;
+      min-height: 36px;
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 7px;
       font-family: var(--font);
-      transition: all 0.15s;
+      white-space: nowrap;
+      transition: background-color 150ms var(--ease-out), border-color 150ms var(--ease-out), color 150ms var(--ease-out), transform 120ms var(--ease-out);
     }
 
     .btn-header-action:hover {
-      background: var(--bg);
-      color: var(--text-main);
-      border-color: var(--eco-forest);
+      background: var(--card-bg);
+      border-color: var(--card-border-strong);
+    }
+
+    .btn-header-action:active {
+      transform: scale(0.98);
+    }
+
+    .btn-header-action svg {
+      flex-shrink: 0;
     }
 
     .btn-header-action.btn-download {
-      border-color: rgba(178, 154, 75, 0.55);
-      color: #8C7323;
-      font-weight: 600;
+      background: var(--earth-gold-soft);
+      border-color: rgba(114, 88, 20, 0.28);
+      color: var(--earth-gold-text);
     }
 
     .btn-header-action.btn-download:hover {
-      background: var(--earth-gold-soft);
+      background: rgba(178, 154, 75, 0.20);
       border-color: var(--earth-gold);
-      color: #6B5614;
     }
 
     body.dark-mode .btn-header-action.btn-download {
-      border-color: rgba(197, 160, 89, 0.5);
-      color: var(--earth-gold-light);
+      border-color: rgba(214, 183, 108, 0.35);
+      color: var(--earth-gold-text);
     }
 
     body.dark-mode .btn-header-action.btn-download:hover {
-      background: rgba(197, 160, 89, 0.14);
-      border-color: var(--earth-gold-light);
-      color: var(--earth-gold-light);
+      background: rgba(214, 183, 108, 0.22);
+      border-color: var(--earth-gold-text);
     }
 
     .btn-header-action.btn-install {
       background: var(--eco-forest);
       border-color: var(--eco-forest);
       color: #FFFFFF;
-      font-weight: 600;
     }
 
     .btn-header-action.btn-install:hover {
       background: var(--eco-emerald);
       border-color: var(--eco-emerald);
-      color: #FFFFFF;
     }
 
     .btn-header-action.btn-sync {
-      border-color: rgba(19, 117, 71, 0.45);
+      background: transparent;
+      border-color: rgba(19, 117, 71, 0.35);
       color: var(--eco-forest);
-      font-weight: 600;
     }
 
     .btn-header-action.btn-sync:hover {
       background: rgba(19, 117, 71, 0.08);
       border-color: var(--eco-forest);
-      color: var(--eco-forest);
     }
 
     body.dark-mode .btn-header-action.btn-sync {
-      border-color: rgba(82, 183, 136, 0.45);
+      border-color: rgba(82, 183, 136, 0.38);
       color: var(--eco-mint);
     }
 
     body.dark-mode .btn-header-action.btn-sync:hover {
       background: rgba(82, 183, 136, 0.12);
       border-color: var(--eco-mint);
-      color: var(--eco-mint);
     }
 
     @keyframes spinSync {
@@ -294,50 +334,54 @@
     .upload-toast {
       position: fixed;
       top: 16px;
-      right: 22px;
+      right: 24px;
       z-index: 9999;
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 10px 16px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
       opacity: 0;
-      transform: translateY(-12px);
-      transition: all 0.25s ease;
+      transform: translateY(-10px);
+      transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
       pointer-events: none;
     }
+
     .upload-toast.show {
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
+
     .upload-toast.success {
-      background: var(--eco-forest);
+      background: var(--eco-emerald);
       color: #FFFFFF;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-    .upload-toast.warning {
-      background: var(--earth-gold-light);
-      color: #101E1A;
-      border: 1px solid #FFE082;
-    }
-    .upload-toast.error {
-      background: #A83232;
-      color: #FFFFFF;
-      border: 1px solid #E57373;
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
-    /* FIXED LEFT-ALIGNED FILTER CONTROLS ACROSS ALL DASHBOARDS */
+    .upload-toast.warning {
+      background: #F4E8C1;
+      color: #3B2D07;
+      border: 1px solid rgba(114, 88, 20, 0.35);
+    }
+
+    .upload-toast.error {
+      background: #9E2A2B;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Filter & Navigation Controls */
     .filter-bar-left {
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid var(--header-border);
-      padding-top: 10px;
-      gap: 16px;
+      padding-top: 12px;
+      gap: 12px 16px;
       flex-wrap: wrap;
     }
 
@@ -348,13 +392,12 @@
       flex-wrap: wrap;
     }
 
-    /* Brand Slicer Buttons */
     .brand-slicer-nav {
       display: flex;
       align-items: center;
-      background: var(--bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 7px;
+      background: var(--surface-raised);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-control);
       padding: 3px;
       gap: 3px;
     }
@@ -363,16 +406,21 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 6px 15px;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 5px;
+      padding: 6px 14px;
+      min-height: 34px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.15s ease;
+      gap: 7px;
+      transition: background-color 150ms var(--ease-out), color 150ms var(--ease-out);
       font-family: var(--font);
+    }
+
+    .brand-slicer-btn svg {
+      flex-shrink: 0;
     }
 
     .brand-slicer-btn:hover {
@@ -382,22 +430,22 @@
     .brand-slicer-btn.active {
       background: var(--eco-forest);
       color: #FFFFFF;
-      box-shadow: 0 2px 8px rgba(19, 117, 71, 0.3);
+      font-weight: 600;
     }
 
     .brand-slicer-btn.active.gold {
       background: var(--earth-gold);
-      color: #000000;
-      box-shadow: 0 2px 8px rgba(178, 154, 75, 0.35);
+      color: #16221D;
+      font-weight: 600;
     }
 
     /* Period Filter Slicer */
     .period-slicer {
       display: flex;
       align-items: center;
-      background: var(--bg);
+      background: var(--surface-raised);
       border: 1px solid var(--card-border);
-      border-radius: 6px;
+      border-radius: var(--radius-control);
       padding: 3px;
       gap: 2px;
     }
@@ -406,13 +454,15 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 5px 11px;
-      font-size: 11.5px;
-      font-weight: 600;
-      border-radius: 4px;
+      padding: 6px 12px;
+      min-height: 34px;
+      font-size: 12.5px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       font-family: var(--font);
-      transition: all 0.15s;
+      transition: background-color 150ms var(--ease-out), color 150ms var(--ease-out);
     }
 
     .period-btn:hover {
@@ -422,90 +472,129 @@
     .period-btn.active {
       background: var(--eco-forest);
       color: #FFFFFF;
+      font-weight: 600;
     }
 
-    /* Standard Single Brand KPI Cards */
+    .header-status-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--text-dim);
+    }
+
+    .status-dot.live {
+      background: var(--eco-forest);
+    }
+
+    body.dark-mode .status-dot.live {
+      background: var(--eco-mint);
+    }
+
+    .status-dot.cached {
+      background: var(--earth-gold);
+    }
+
+    /* KPI Summary Cards */
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .kpi-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-top: 3px solid var(--eco-forest);
-      border-radius: 8px;
+      border-radius: var(--radius-card);
       padding: 16px 18px;
       box-shadow: var(--card-shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
     }
 
-    .kpi-box.gold-accent {
-      border-top-color: var(--earth-gold);
-    }
-
-    .kpi-box:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--card-hover-shadow);
+    .kpi-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .kpi-name {
-      font-size: 11.5px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 500;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .kpi-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--eco-forest);
+      flex-shrink: 0;
+    }
+
+    body.dark-mode .kpi-dot {
+      background: var(--eco-mint);
+    }
+
+    .kpi-box.gold-accent .kpi-dot {
+      background: var(--earth-gold);
     }
 
     .kpi-number {
       font-size: 28px;
-      font-weight: 700;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
       color: var(--text-main);
       line-height: 1.1;
       letter-spacing: -0.02em;
     }
 
     .kpi-tagline {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--eco-forest);
-      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-dim);
+      line-height: 1.3;
     }
 
-    body.dark-mode .kpi-tagline {
-      color: var(--eco-mint);
-    }
-
-    /* BALANCED EQUAL-SIZED COMPARISON KPI CARDS (Requirement 4) */
+    /* Balanced Comparison KPI Cards */
     .kpi-compare-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-top: 3px solid var(--earth-gold);
-      border-radius: 8px;
-      padding: 14px 16px;
+      border-radius: var(--radius-card);
+      padding: 15px 16px;
       box-shadow: var(--card-shadow);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 10px;
     }
 
     .compare-card-title {
-      font-size: 11.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 8px;
-      padding-bottom: 6px;
+      padding-bottom: 8px;
       border-bottom: 1px solid var(--card-border);
     }
 
     .compare-values-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 12px;
       align-items: center;
     }
@@ -513,35 +602,57 @@
     .compare-brand-col {
       display: flex;
       flex-direction: column;
+      gap: 2px;
+      min-width: 0;
     }
 
     .compare-brand-badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 2px;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .brand-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
     .badge-step {
       color: var(--eco-forest);
     }
+
+    .badge-step .brand-dot {
+      background: var(--eco-forest);
+    }
+
     body.dark-mode .badge-step {
       color: var(--eco-mint);
     }
 
+    body.dark-mode .badge-step .brand-dot {
+      background: var(--eco-mint);
+    }
+
     .badge-innova {
-      color: var(--earth-gold);
+      color: var(--earth-gold-text);
+    }
+
+    .badge-innova .brand-dot {
+      background: var(--earth-gold);
     }
 
     .compare-number {
       font-size: 24px;
-      font-weight: 700;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
       color: var(--text-main);
-      line-height: 1.1;
-      letter-spacing: -0.01em;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
     }
 
     /* Main Chart Grid */
@@ -566,8 +677,8 @@
     .dashboard-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 18px;
+      border-radius: var(--radius-card);
+      padding: 20px;
       box-shadow: var(--card-shadow);
       display: flex;
       flex-direction: column;
@@ -579,52 +690,55 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 8px 12px;
     }
 
     .card-heading {
-      font-size: 14.5px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
       color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      text-wrap: balance;
     }
 
-    .card-heading::before {
-      content: "";
-      width: 4px;
-      height: 14px;
-      background: var(--eco-forest);
-      border-radius: 2px;
+    .card-meta {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
     }
 
-    .card-heading.gold::before {
-      background: var(--earth-gold);
+    .card-meta.gold {
+      color: var(--earth-gold-text);
+      font-weight: 600;
     }
 
     .chip-group {
       display: flex;
       gap: 4px;
       flex-wrap: wrap;
+      scrollbar-width: thin;
+      scrollbar-color: var(--scrollbar-thumb) transparent;
     }
 
     .chip-btn,
     .channel-chip {
-      background: var(--bg);
+      background: var(--surface-raised);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 4px;
+      padding: 5px 11px;
+      min-height: 30px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       font-family: var(--font);
-      transition: all 0.15s;
+      transition: background-color 150ms var(--ease-out), border-color 150ms var(--ease-out), color 150ms var(--ease-out);
     }
 
     .chip-btn:hover,
@@ -638,6 +752,7 @@
       background: var(--eco-forest);
       color: #FFFFFF;
       border-color: var(--eco-forest);
+      font-weight: 600;
     }
 
     .chart-scroll-wrap {
@@ -645,6 +760,19 @@
       max-width: 100%;
       min-width: 0;
       position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: var(--scrollbar-thumb) transparent;
+    }
+
+    .chart-scroll-wrap::-webkit-scrollbar,
+    .chip-group::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .chart-scroll-wrap::-webkit-scrollbar-thumb,
+    .chip-group::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 3px;
     }
 
     .mobile-swipe-hint {
@@ -683,25 +811,26 @@
       position: absolute;
       z-index: 50;
       pointer-events: none;
-      background: rgba(16, 30, 26, 0.95);
+      background: rgba(17, 26, 23, 0.96);
       color: #FFFFFF;
-      border: 1px solid rgba(178, 154, 75, 0.55);
-      border-radius: 6px;
-      padding: 7px 11px;
-      font-size: 11.5px;
-      font-weight: 600;
+      border: 1px solid rgba(178, 154, 75, 0.45);
+      border-radius: var(--radius-control);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
       line-height: 1.4;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       white-space: nowrap;
       opacity: 0;
-      transition: opacity 0.12s ease;
+      transition: opacity 120ms var(--ease-out);
     }
 
     .donut-ext-tooltip-title {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
       margin-bottom: 3px;
-      color: #E2ECE7;
+      color: #EDF2EF;
     }
 
     .donut-ext-tooltip-row {
@@ -720,80 +849,64 @@
     }
 
     .donut-center-metric .number {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 26px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
       color: var(--text-main);
       line-height: 1.1;
+      letter-spacing: -0.02em;
     }
 
     .donut-center-metric .label {
-      font-size: 10.5px;
+      font-size: 12px;
       color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: 2px;
     }
 
     .custom-legend {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, auto));
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 8px;
-      font-size: 11.5px;
+      gap: 8px 20px;
+      margin-top: 12px;
+      font-size: 12.5px;
       color: var(--text-muted);
     }
 
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .legend-bullet {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-    }
-
-    /* TOGGLEABLE DATA TABLE SECTION */
-    .data-table-toggle-bar {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0 20px;
-    }
-
-    .btn-toggle-table {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 9px 18px;
-      border-radius: 6px;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
+    .custom-legend-item {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.2s;
+      gap: 7px;
+      font-size: 12.5px;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      line-height: 1.35;
     }
 
-    .btn-toggle-table:hover {
-      background: var(--bg);
-      border-color: var(--eco-forest);
-      color: var(--eco-forest);
+    .custom-legend-item strong {
+      font-weight: 600;
+      color: var(--text-main);
     }
 
-    /* Footer Permanent Links (Clean without right upward arrows) */
+    .legend-color-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Footer Permanent Links */
     .dashboard-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid var(--header-border);
-      padding-top: 18px;
+      padding-top: 20px;
       margin-top: 24px;
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text-dim);
+      text-wrap: pretty;
       flex-wrap: wrap;
       gap: 12px;
     }
@@ -807,30 +920,35 @@
     .footer-link {
       color: var(--eco-forest);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 500;
       display: inline-flex;
       align-items: center;
-      transition: color 0.15s;
+      transition: color 150ms var(--ease-out);
     }
 
     .footer-link:hover {
-      color: var(--earth-gold);
+      color: var(--earth-gold-text);
     }
 
     body.dark-mode .footer-link {
       color: var(--eco-mint);
     }
 
-    /* MOBILE & TABLET PWA RESPONSIVE LAYOUT */
+    body.dark-mode .footer-link:hover {
+      color: var(--earth-gold-text);
+    }
+
+    /* Mobile & Tablet PWA Responsive Layout */
     @media (max-width: 768px) {
       .dashboard-container {
-        padding: 10px 12px calc(28px + env(safe-area-inset-bottom));
+        padding: 12px 12px calc(32px + env(safe-area-inset-bottom));
       }
 
       .dashboard-header {
         padding: 12px;
         gap: 10px;
         margin-bottom: 12px;
+        border-radius: var(--radius-card);
       }
 
       .header-top-row {
@@ -838,36 +956,43 @@
       }
 
       .brand-identity {
+        align-items: flex-start;
         gap: 10px;
         width: 100%;
       }
 
       .brand-logo-img {
-        height: 38px;
+        height: 40px;
         max-width: 96px;
       }
 
       .brand-title {
-        font-size: 14.5px;
+        font-size: 15px;
         line-height: 1.25;
       }
 
       .brand-subtitle {
-        font-size: 10px;
+        font-size: 12px;
       }
 
       .header-actions-right {
         width: 100%;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 6px;
       }
 
+      .header-actions-right.has-install {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .btn-header-action {
-        flex: 1 1 auto;
+        width: 100%;
         justify-content: center;
-        padding: 7px 10px;
-        font-size: 11.5px;
-        min-height: 34px;
+        padding: 7px 8px;
+        font-size: 12px;
+        min-height: 36px;
+        min-width: 0;
       }
 
       .filter-bar-left {
@@ -884,6 +1009,7 @@
         width: 100%;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: stretch;
         gap: 3px;
       }
 
@@ -891,35 +1017,40 @@
         flex-direction: column;
         justify-content: center;
         text-align: center;
-        padding: 7px 4px;
-        font-size: 10.5px;
+        padding: 8px 4px;
+        font-size: 11.5px;
         line-height: 1.2;
         white-space: normal;
-        gap: 2px;
-        min-height: 40px;
+        gap: 4px;
+        min-height: 48px;
+        height: 100%;
         min-width: 0;
       }
 
       .period-slicer {
         width: 100%;
         display: grid;
-        grid-template-columns: minmax(0, 1.45fr) repeat(4, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr));
         gap: 2px;
       }
 
       .period-btn {
         padding: 6px 2px;
-        font-size: 11px;
+        font-size: 12px;
         text-align: center;
         white-space: nowrap;
-        min-height: 32px;
+        min-height: 36px;
         min-width: 0;
+      }
+
+      .header-status-note {
+        font-size: 12px;
       }
 
       .kpi-row {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
       }
 
       .kpi-box {
@@ -928,7 +1059,7 @@
       }
 
       .kpi-name {
-        font-size: 10.5px;
+        font-size: 12px;
       }
 
       .kpi-number {
@@ -936,18 +1067,18 @@
       }
 
       .kpi-tagline {
-        font-size: 10.5px;
+        font-size: 12px;
       }
 
       .kpi-compare-box {
-        padding: 11px 10px;
+        padding: 12px 11px;
         min-width: 0;
+        gap: 8px;
       }
 
       .compare-card-title {
-        font-size: 10px;
-        margin-bottom: 6px;
-        padding-bottom: 5px;
+        font-size: 12px;
+        padding-bottom: 6px;
       }
 
       .compare-values-grid {
@@ -956,11 +1087,12 @@
       }
 
       .compare-brand-badge {
-        font-size: 9.5px;
+        font-size: 12px;
+        gap: 4px;
       }
 
       .compare-number {
-        font-size: 17.5px;
+        font-size: 18px;
       }
 
       .grid-row {
@@ -969,7 +1101,7 @@
       }
 
       .dashboard-card {
-        padding: 13px 12px;
+        padding: 14px 12px;
       }
 
       .card-top {
@@ -979,23 +1111,28 @@
       }
 
       .card-heading {
-        font-size: 13.5px;
+        font-size: 14.5px;
+      }
+
+      .card-meta {
+        font-size: 12px;
       }
 
       .chip-group {
         width: 100%;
-        gap: 5px;
+        gap: 6px;
         overflow-x: auto;
         flex-wrap: nowrap;
-        padding-bottom: 2px;
+        padding-bottom: 3px;
         -webkit-overflow-scrolling: touch;
       }
 
       .channel-chip {
         white-space: nowrap;
         flex-shrink: 0;
-        min-height: 30px;
-        padding: 5px 10px;
+        min-height: 34px;
+        padding: 6px 12px;
+        font-size: 12px;
       }
 
       .chart-scroll-wrap {
@@ -1027,10 +1164,10 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        font-size: 10px;
+        font-size: 12px;
         color: var(--text-dim);
-        margin-top: 4px;
-        font-weight: 500;
+        margin-top: 6px;
+        font-weight: 400;
       }
 
       .donut-wrap {
@@ -1038,7 +1175,17 @@
       }
 
       .donut-center-metric .number {
-        font-size: 21px;
+        font-size: 22px;
+      }
+
+      .custom-legend {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px 10px;
+      }
+
+      .custom-legend-item {
+        font-size: 12px;
+        justify-content: flex-start;
       }
 
       .upload-toast {
@@ -1053,20 +1200,40 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 6px;
-        padding-top: 14px;
+        gap: 8px;
+        padding-top: 16px;
         margin-top: 16px;
+        font-size: 12px;
       }
     }
 
     @media (max-width: 374px) {
       .brand-slicer-btn {
-        font-size: 10px;
+        font-size: 11.5px;
         padding: 6px 2px;
       }
 
       .compare-number {
         font-size: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body,
+      .btn-header-action,
+      .brand-slicer-btn,
+      .period-btn,
+      .channel-chip,
+      .logo-link,
+      .brand-link,
+      .footer-link,
+      .upload-toast,
+      .donut-ext-tooltip {
+        transition: none;
+      }
+
+      .spinning {
+        animation: none;
       }
     }
   </style>
@@ -1091,51 +1258,54 @@
           </div>
         </div>
 
-        <div class="header-actions-right">
+        <div class="header-actions-right" id="headerActionsRight">
           <!-- Live Google Sheet Sync Button -->
           <button class="btn-header-action btn-sync" onclick="syncGoogleSheetData(true)" id="btnGoogleSync" title="Sync live updates from Google Sheet">
-            <svg id="syncIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <svg id="syncIcon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path><path d="M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
             <span id="syncText">Sync Live Sheet</span>
           </button>
 
           <!-- Download Raw Data File Button -->
           <button class="btn-header-action btn-download" onclick="downloadRawDataCSV()" id="btnDownloadRaw" title="Download raw KPI CSV data file">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             <span>Raw Data</span>
           </button>
 
           <!-- PWA Install App Button (shown when browser supports install prompt) -->
           <button class="btn-header-action btn-install" onclick="promptInstallPWA()" id="btnInstallPwa" style="display:none;" title="Install Executive Dashboard as an App">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
             <span>Install App</span>
           </button>
 
           <!-- Light / Dark Toggle -->
           <button class="btn-header-action" onclick="toggleTheme()" id="themeBtn" title="Toggle Light / Dark mode">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg id="themeIcon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             <span id="themeText">Dark</span>
           </button>
         </div>
       </div>
 
-      <!-- FIXED LEFT-ALIGNED FILTER CONTROLS ACROSS ALL DASHBOARDS -->
+      <!-- Filter & Brand Controls -->
       <div class="filter-bar-left">
         <div class="filters-left-cluster">
           <!-- Brand Slicer -->
-          <nav class="brand-slicer-nav">
+          <nav class="brand-slicer-nav" aria-label="Brand view switcher">
             <button class="brand-slicer-btn active" onclick="setBrandMode('step', this)" id="btnStep">
-              🌿 STEP Channels
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+              <span>STEP Channels</span>
             </button>
             <button class="brand-slicer-btn" onclick="setBrandMode('innova', this)" id="btnInnova">
-              🏢 INNOVA Channels
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+              <span>INNOVA Channels</span>
             </button>
             <button class="brand-slicer-btn gold" onclick="setBrandMode('compare', this)" id="btnCompare">
-              ⚖️ Compare Both
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5"></path><path d="M8 3H3v5"></path><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"></path><path d="m15 9 6-6"></path></svg>
+              <span>Compare Both</span>
             </button>
           </nav>
 
           <!-- Period Filter Slicer -->
-          <div class="period-slicer" id="periodSlicer">
+          <div class="period-slicer" id="periodSlicer" role="group" aria-label="Reporting period">
             <button class="period-btn active" onclick="setPeriod('all', this)">All (40W)</button>
             <button class="period-btn" onclick="setPeriod('q1', this)">Q1</button>
             <button class="period-btn" onclick="setPeriod('q2', this)">Q2</button>
@@ -1144,12 +1314,12 @@
           </div>
         </div>
 
-        <span style="font-size:11.5px; color:var(--text-dim);" id="headerStatusNote">Quarter Filter: All (40W)</span>
+        <span class="header-status-note" id="headerStatusNote"><span class="status-dot" aria-hidden="true"></span><span>Quarter filter: All (40W)</span></span>
       </div>
     </header>
 
     <!-- FLOATING TOAST NOTIFICATION -->
-    <div id="uploadToast" class="upload-toast"></div>
+    <div id="uploadToast" class="upload-toast" role="status" aria-live="polite"></div>
 
     <!-- Dynamic KPI Scorecards (Filtered by Quarter & Brand) -->
     <div class="kpi-row" id="kpiContainer">
@@ -1171,14 +1341,14 @@
             <canvas id="growthChart"></canvas>
           </div>
         </div>
-        <div class="mobile-swipe-hint" id="growthSwipeHint">← Swipe horizontally to explore all weeks →</div>
+        <div class="mobile-swipe-hint" id="growthSwipeHint">Scroll horizontally to view all weeks</div>
       </div>
 
       <!-- Chart 2: Channel Mix / Distribution Donut -->
       <div class="dashboard-card">
         <div class="card-top">
-          <div class="card-heading gold" id="donutCardTitle">Channel Audience Distribution</div>
-          <span style="font-size:11.5px; color:var(--text-muted);" id="donutCardSubtitle">Quarter Snapshot</span>
+          <div class="card-heading" id="donutCardTitle">Channel Audience Distribution</div>
+          <span class="card-meta" id="donutCardSubtitle">Quarter snapshot</span>
         </div>
         <div class="donut-wrap">
           <canvas id="distributionDonutChart"></canvas>
@@ -1197,8 +1367,8 @@
     <div class="grid-row" id="benchmarkRow" style="display:none;">
       <div class="dashboard-card">
         <div class="card-top">
-          <div class="card-heading gold">Direct Channel Benchmark: STEP vs. INNOVA</div>
-          <span style="font-size:11.5px; color:var(--text-muted);" id="benchmarkCardSubtitle">Quarter Snapshot Comparison</span>
+          <div class="card-heading">Direct Channel Benchmark: STEP vs. INNOVA</div>
+          <span class="card-meta" id="benchmarkCardSubtitle">Quarter snapshot comparison</span>
         </div>
         <div class="chart-canvas-box" style="height:260px;">
           <canvas id="benchmarkChart"></canvas>
@@ -1206,29 +1376,29 @@
       </div>
     </div>
 
-    <!-- ROW 3: Dedicated Subscriber Deep-Dive (Clean: NO 4 tiles under line chart) -->
+    <!-- ROW 3: Dedicated Subscriber Deep-Dive -->
     <div class="grid-row grid-2-col" id="subscriberSection">
       <!-- Active & Other Subscribers Trend Over Time -->
       <div class="dashboard-card">
         <div class="card-top">
           <div class="card-heading">STEP Subscriber Growth by Category</div>
-          <span style="font-size:11.5px; color:var(--text-muted);">Healthy, Passive, Unengaged & Inactive</span>
+          <span class="card-meta">Healthy, Passive, Unengaged &amp; Inactive</span>
         </div>
         <div class="chart-scroll-wrap">
           <div class="chart-canvas-box-tall weekly-scrollable" id="subscriberTrendBox">
             <canvas id="subscriberTrendChart"></canvas>
           </div>
         </div>
-        <div class="mobile-swipe-hint" id="subSwipeHint">← Swipe horizontally to explore all weeks →</div>
+        <div class="mobile-swipe-hint" id="subSwipeHint">Scroll horizontally to view all weeks</div>
       </div>
 
       <!-- Subscriber List Health Composition Donut -->
       <div class="dashboard-card">
         <div class="card-top">
           <div class="card-heading">Subscriber List Composition</div>
-          <span style="font-size:11.5px; color:var(--earth-gold-light); font-weight:700;" id="subDonutTopLabel">Quarter Snapshot</span>
+          <span class="card-meta gold" id="subDonutTopLabel">Quarter snapshot</span>
         </div>
-        
+
         <div class="donut-wrap">
           <canvas id="subscriberDonutChart"></canvas>
           <div class="donut-center-metric">
@@ -1247,9 +1417,9 @@
     <div class="grid-row" id="webinarSection">
       <div class="dashboard-card">
         <div class="card-top">
-          <div class="card-heading">STEP Webinar Registrations & Live Attendees</div>
-          <span style="font-size:11.5px; color:var(--earth-gold-light); font-weight:600;" id="webinarHeaderStats">
-            Registrations & Attendees
+          <div class="card-heading">STEP Webinar Registrations &amp; Live Attendees</div>
+          <span class="card-meta gold" id="webinarHeaderStats">
+            Registrations &amp; Attendees
           </span>
         </div>
         <div class="chart-scroll-wrap">
@@ -1257,21 +1427,21 @@
             <canvas id="webinarMonthlyChart"></canvas>
           </div>
         </div>
-        <div class="mobile-swipe-hint" id="webinarSwipeHint">← Swipe horizontally to compare all months →</div>
+        <div class="mobile-swipe-hint" id="webinarSwipeHint">Scroll horizontally to compare all months</div>
       </div>
     </div>
 
 
-    <!-- Footer Permanent Links (Requirement 1: NO right upward arrows) -->
+    <!-- Footer Permanent Links (Clean without right upward arrows) -->
     <footer class="dashboard-footer">
       <div>
-        &copy; 2026 Executive Performance Overview &bull; All Rights Reserved.
+        &copy; 2026 Executive Performance Overview
       </div>
       <div class="footer-links">
         <a href="https://step.mykajabi.com/" target="_blank" rel="noopener noreferrer" class="footer-link">
           STEP Platform
         </a>
-        <span>&bull;</span>
+        <span aria-hidden="true">&bull;</span>
         <a href="https://step.mykajabi.com/innovabeyonddigital" target="_blank" rel="noopener noreferrer" class="footer-link">
           InnovaBeyond Digital
         </a>
@@ -1318,19 +1488,24 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       });
     }
 
+    function setInstallButtonVisible(visible) {
+      const installBtn = document.getElementById('btnInstallPwa');
+      const actionsWrap = document.getElementById('headerActionsRight');
+      if (installBtn) installBtn.style.display = visible ? 'inline-flex' : 'none';
+      if (actionsWrap) actionsWrap.classList.toggle('has-install', !!visible);
+    }
+
     // Handle Mobile / Desktop PWA Install Prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
-      const installBtn = document.getElementById('btnInstallPwa');
-      if (installBtn) installBtn.style.display = 'inline-flex';
+      setInstallButtonVisible(true);
     });
 
     window.addEventListener('appinstalled', () => {
       deferredInstallPrompt = null;
-      const installBtn = document.getElementById('btnInstallPwa');
-      if (installBtn) installBtn.style.display = 'none';
-      showToast('✓ App installed successfully on your device!', 'success');
+      setInstallButtonVisible(false);
+      showToast('App installed on your device', 'success');
     });
 
     async function promptInstallPWA() {
@@ -1339,8 +1514,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const { outcome } = await deferredInstallPrompt.userChoice;
       if (outcome === 'accepted') {
         deferredInstallPrompt = null;
-        const installBtn = document.getElementById('btnInstallPwa');
-        if (installBtn) installBtn.style.display = 'none';
+        setInstallButtonVisible(false);
       }
     }
 
@@ -1406,14 +1580,31 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 
-        showToast('✓ Raw data file downloaded (' + filename + ')', 'success');
+        showToast('Raw data downloaded (' + filename + ')', 'success');
       } catch (err) {
         console.error('Download failed:', err);
-        showToast('⚠️ Could not download raw data file: ' + err.message, 'error');
+        showToast('Could not download raw data file: ' + err.message, 'error');
       }
     }
 
-    // Auto-bridge: If opened via file://, seamless jump to http://localhost:8000 where browser allows live Google sync!
+    function setHeaderStatus(state, text, highlightColor = '') {
+      const note = document.getElementById('headerStatusNote');
+      if (!note) return;
+      note.innerHTML = '';
+      const dot = document.createElement('span');
+      dot.className = 'status-dot' + (state ? ' ' + state : '');
+      dot.setAttribute('aria-hidden', 'true');
+      const label = document.createElement('span');
+      if (highlightColor) {
+        label.style.color = highlightColor;
+        label.style.fontWeight = '600';
+      }
+      label.textContent = text;
+      note.appendChild(dot);
+      note.appendChild(label);
+    }
+
+    // Auto-bridge: If opened via file://, seamless jump to http://localhost:8000 where browser allows live Google sync
     if (window.location.protocol === 'file:') {
       fetch('http://localhost:8000/step_executive_dashboard.html', { mode: 'no-cors', cache: 'no-cache' })
         .then(() => {
@@ -1421,10 +1612,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         })
         .catch(() => {
           console.log('Running in local file mode (server not detected).');
-          const note = document.getElementById('headerStatusNote');
-          if (note) {
-            note.innerHTML = '📁 <span style="color:var(--text-muted);">Offline File Mode</span> • Run <b style="color:var(--eco-forest);">launch_dashboard.bat</b> for Live Sheet Sync';
-          }
+          setHeaderStatus('', 'Offline file mode • Run launch_dashboard.bat for live sync');
         });
     }
 
@@ -1441,6 +1629,11 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       } catch (e) {}
 
       updateBrandView();
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          refreshAllCharts();
+        });
+      }
       // Auto-fetch live data from Google Sheet on page load
       syncGoogleSheetData(false);
 
@@ -1460,21 +1653,16 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       // If running from local disk (file://)
       if (window.location.protocol === 'file:') {
         try {
-          // Probe if local live server is running on port 8000
           await fetch('http://localhost:8000/step_executive_dashboard.html', { mode: 'no-cors', cache: 'no-cache' });
-          // If server responded, seamlessly jump to localhost to enable live sync
           window.location.replace('http://localhost:8000/step_executive_dashboard.html');
           return;
         } catch (e) {
           if (syncIcon) syncIcon.classList.remove('spinning');
           if (syncText) syncText.textContent = 'Sync Live Sheet';
           if (showUserToast) {
-            showToast('ℹ️ Live Google Sheet sync requires running via launch_dashboard.bat (http://localhost:8000). Showing saved data.', 'warning');
+            showToast('Live Google Sheet sync requires launch_dashboard.bat (http://localhost:8000)', 'warning');
           }
-          const note = document.getElementById('headerStatusNote');
-          if (note) {
-            note.innerHTML = '📁 <span style="color:var(--text-muted);">Offline File Mode</span> • Run <b style="color:var(--eco-forest);">launch_dashboard.bat</b> for Live Sheet Sync';
-          }
+          setHeaderStatus('', 'Offline file mode • Run launch_dashboard.bat for live sync');
           return;
         }
       }
@@ -1496,22 +1684,18 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
         processParsedMatrix(rows, 'Google Sheet (Live)', showUserToast);
 
-        const note = document.getElementById('headerStatusNote');
-        if (note) {
-          note.innerHTML = '🟢 <span style="color:var(--eco-forest); font-weight:600;">Live Google Sheet Connected</span> • ' + DATA.timeline.length + ' Weeks';
-        }
+        setHeaderStatus('live', 'Live Google Sheet connected • ' + DATA.timeline.length + ' weeks', 'var(--text-main)');
 
         if (showUserToast) {
-          showToast('✓ Live data successfully synced from Google Sheets (' + DATA.timeline.length + ' weeks loaded)!', 'success');
+          showToast('Live data synced from Google Sheets (' + DATA.timeline.length + ' weeks)', 'success');
         }
       } catch (err) {
         console.warn('Could not auto-sync from Google Sheets (using local/cached data):', err);
-        const note = document.getElementById('headerStatusNote');
-        if (note && (latestRawCSV || localStorage.getItem(PWA_CSV_CACHE_KEY))) {
-          note.innerHTML = '🟡 <span style="color:var(--earth-gold); font-weight:600;">Offline PWA Mode</span> • ' + DATA.timeline.length + ' Weeks (Cached)';
+        if (latestRawCSV || localStorage.getItem(PWA_CSV_CACHE_KEY)) {
+          setHeaderStatus('cached', 'Offline PWA cache • ' + DATA.timeline.length + ' weeks', 'var(--earth-gold-text)');
         }
         if (showUserToast) {
-          showToast('⚠️ Offline or unreachable: showing latest cached data.', 'warning');
+          showToast('Offline or unreachable: showing latest cached data', 'warning');
         }
       } finally {
         if (syncIcon) syncIcon.classList.remove('spinning');
@@ -1522,7 +1706,24 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     function showToast(message, type = 'success') {
       const toast = document.getElementById('uploadToast');
       if (!toast) return;
-      toast.textContent = message;
+      toast.innerHTML = '';
+      const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      iconSvg.setAttribute('width', '16');
+      iconSvg.setAttribute('height', '16');
+      iconSvg.setAttribute('viewBox', '0 0 24 24');
+      iconSvg.setAttribute('fill', 'none');
+      iconSvg.setAttribute('stroke', 'currentColor');
+      iconSvg.setAttribute('stroke-width', '2');
+      iconSvg.setAttribute('stroke-linecap', 'round');
+      iconSvg.setAttribute('stroke-linejoin', 'round');
+      iconSvg.setAttribute('aria-hidden', 'true');
+      iconSvg.innerHTML = type === 'success'
+        ? '<polyline points="20 6 9 17 4 12"></polyline>'
+        : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+      const span = document.createElement('span');
+      span.textContent = message;
+      toast.appendChild(iconSvg);
+      toast.appendChild(span);
       toast.className = 'upload-toast show ' + type;
       setTimeout(() => {
         toast.className = 'upload-toast';
@@ -1533,9 +1734,15 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       document.body.classList.toggle('dark-mode');
       const isDark = document.body.classList.contains('dark-mode');
       const themeText = document.getElementById('themeText');
+      const themeIcon = document.getElementById('themeIcon');
       if (themeText) themeText.textContent = isDark ? 'Light' : 'Dark';
+      if (themeIcon) {
+        themeIcon.innerHTML = isDark
+          ? '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>'
+          : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
       const themeMeta = document.querySelector('meta[name="theme-color"]');
-      if (themeMeta) themeMeta.setAttribute('content', isDark ? '#0D1915' : '#137547');
+      if (themeMeta) themeMeta.setAttribute('content', isDark ? '#111A17' : '#137547');
       refreshAllCharts();
     }
 
@@ -1543,10 +1750,9 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       currentPeriod = p;
       document.querySelectorAll('#periodSlicer .period-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
-      
+
       const qLabels = { 'all': 'All (' + DATA.timeline.length + 'W)', 'q1': 'Quarter 1', 'q2': 'Quarter 2', 'q3': 'Quarter 3', 'q4': 'Quarter 4' };
-      const note = document.getElementById('headerStatusNote');
-      if (note) note.textContent = 'Quarter Filter: ' + (qLabels[p] || p);
+      setHeaderStatus('', 'Quarter filter: ' + (qLabels[p] || p));
 
       renderCurrentKPIs();
       refreshAllCharts();
@@ -1555,7 +1761,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     function setBrandMode(mode, btn) {
       currentBrand = mode;
       activeChannelChip = 'all';
-      
+
       document.querySelectorAll('.brand-slicer-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
 
@@ -1580,7 +1786,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         if (title) title.innerHTML = '<a href="https://step.mykajabi.com/" target="_blank" rel="noopener noreferrer" class="brand-link">STEP • Sustainability Transformation & Empowerment Platform</a>';
         if (subtitle) {
           subtitle.style.display = 'block';
-          subtitle.textContent = 'Enterprise Social Performance Analytics';
+          subtitle.textContent = 'Enterprise social performance analytics';
         }
         if (subSec) subSec.style.display = 'grid';
         if (webSec) webSec.style.display = 'grid';
@@ -1610,7 +1816,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         if (title) title.innerHTML = '<a href="https://step.mykajabi.com/innovabeyonddigital" target="_blank" rel="noopener noreferrer" class="brand-link">InnovaBeyond Digital</a>';
         if (subtitle) {
           subtitle.style.display = 'block';
-          subtitle.textContent = 'STEP & INNOVA BENCHMARK';
+          subtitle.textContent = 'STEP and InnovaBeyond benchmark';
         }
         if (subSec) subSec.style.display = 'grid';
         if (webSec) webSec.style.display = 'none';
@@ -1631,158 +1837,57 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const container = document.getElementById('kpiContainer');
       if (!container) return;
 
+      const singleCard = (name, value, tagline, gold = false) => `
+        <div class="kpi-box${gold ? ' gold-accent' : ''}">
+          <div class="kpi-label-row">
+            <span class="kpi-name">${name}</span>
+            <span class="kpi-dot" aria-hidden="true"></span>
+          </div>
+          <div class="kpi-number">${value}</div>
+          <div class="kpi-tagline">${tagline}</div>
+        </div>
+      `;
+
+      const compareCard = (title, leftBadge, leftClass, leftVal, rightBadge, rightClass, rightVal) => `
+        <div class="kpi-compare-box">
+          <div class="compare-card-title">${title}</div>
+          <div class="compare-values-grid">
+            <div class="compare-brand-col">
+              <span class="compare-brand-badge ${leftClass}"><span class="brand-dot" aria-hidden="true"></span>${leftBadge}</span>
+              <span class="compare-number">${leftVal}</span>
+            </div>
+            <div class="compare-brand-col">
+              <span class="compare-brand-badge ${rightClass}"><span class="brand-dot" aria-hidden="true"></span>${rightBadge}</span>
+              <span class="compare-number">${rightVal}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
       if (currentBrand === 'step') {
-        container.innerHTML = `
-          <div class="kpi-box gold-accent">
-            <div class="kpi-name">STEP LinkedIn</div>
-            <div class="kpi-number">${snap.step.linkedin.toLocaleString()}</div>
-            <div class="kpi-tagline">Network Followers</div>
-          </div>
-          <div class="kpi-box gold-accent">
-            <div class="kpi-name">STEP YouTube</div>
-            <div class="kpi-number">${snap.step.youtube.toLocaleString()}</div>
-            <div class="kpi-tagline">Video Subscribers</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">STEP Instagram</div>
-            <div class="kpi-number">${snap.step.instagram.toLocaleString()}</div>
-            <div class="kpi-tagline">Community Followers</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">STEP Facebook</div>
-            <div class="kpi-number">${snap.step.facebook.toLocaleString()}</div>
-            <div class="kpi-tagline">Page Followers</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">CRM Contacts</div>
-            <div class="kpi-number">${snap.step.contacts.toLocaleString()}</div>
-            <div class="kpi-tagline">Enterprise Database</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">Email Subscribers</div>
-            <div class="kpi-number">${snap.step.subscribers.toLocaleString()}</div>
-            <div class="kpi-tagline">Newsletter Reach</div>
-          </div>
-        `;
+        container.innerHTML =
+          singleCard('STEP LinkedIn', snap.step.linkedin.toLocaleString(), 'Network followers', true) +
+          singleCard('STEP YouTube', snap.step.youtube.toLocaleString(), 'Video subscribers', true) +
+          singleCard('STEP Instagram', snap.step.instagram.toLocaleString(), 'Community followers') +
+          singleCard('STEP Facebook', snap.step.facebook.toLocaleString(), 'Page followers') +
+          singleCard('CRM Contacts', snap.step.contacts.toLocaleString(), 'Enterprise database') +
+          singleCard('Email Subscribers', snap.step.subscribers.toLocaleString(), 'Newsletter reach');
       } else if (currentBrand === 'innova') {
-        container.innerHTML = `
-          <div class="kpi-box gold-accent">
-            <div class="kpi-name">Innova LinkedIn</div>
-            <div class="kpi-number">${snap.innova.linkedin.toLocaleString()}</div>
-            <div class="kpi-tagline">Network Followers</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">Innova Instagram</div>
-            <div class="kpi-number">${snap.innova.instagram.toLocaleString()}</div>
-            <div class="kpi-tagline">Visual Audience</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">Innova YouTube</div>
-            <div class="kpi-number">${snap.innova.youtube.toLocaleString()}</div>
-            <div class="kpi-tagline">Subscribers</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">Innova Facebook</div>
-            <div class="kpi-number">${snap.innova.facebook.toLocaleString()}</div>
-            <div class="kpi-tagline">Page Followers</div>
-          </div>
-          <div class="kpi-box gold-accent">
-            <div class="kpi-name">Total Innova Audience</div>
-            <div class="kpi-number">${snap.innova.total.toLocaleString()}</div>
-            <div class="kpi-tagline">Cross-Platform Reach</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-name">Active Channels</div>
-            <div class="kpi-number">4</div>
-            <div class="kpi-tagline">Multi-Channel Network</div>
-          </div>
-        `;
+        container.innerHTML =
+          singleCard('Innova LinkedIn', snap.innova.linkedin.toLocaleString(), 'Network followers', true) +
+          singleCard('Innova Instagram', snap.innova.instagram.toLocaleString(), 'Visual audience') +
+          singleCard('Innova YouTube', snap.innova.youtube.toLocaleString(), 'Subscribers') +
+          singleCard('Innova Facebook', snap.innova.facebook.toLocaleString(), 'Page followers') +
+          singleCard('Total Innova Audience', snap.innova.total.toLocaleString(), 'Cross-platform reach', true) +
+          singleCard('Active Channels', '4', 'Multi-channel network');
       } else if (currentBrand === 'compare') {
-        container.innerHTML = `
-          <div class="kpi-compare-box">
-            <div class="compare-card-title">LinkedIn Comparison</div>
-            <div class="compare-values-grid">
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● STEP</span>
-                <span class="compare-number">${snap.step.linkedin.toLocaleString()}</span>
-              </div>
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-innova">● INNOVA</span>
-                <span class="compare-number">${snap.innova.linkedin.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="kpi-compare-box">
-            <div class="compare-card-title">YouTube Comparison</div>
-            <div class="compare-values-grid">
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● STEP</span>
-                <span class="compare-number">${snap.step.youtube.toLocaleString()}</span>
-              </div>
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-innova">● INNOVA</span>
-                <span class="compare-number">${snap.innova.youtube.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="kpi-compare-box">
-            <div class="compare-card-title">Instagram Comparison</div>
-            <div class="compare-values-grid">
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● STEP</span>
-                <span class="compare-number">${snap.step.instagram.toLocaleString()}</span>
-              </div>
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-innova">● INNOVA</span>
-                <span class="compare-number">${snap.innova.instagram.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="kpi-compare-box">
-            <div class="compare-card-title">Facebook Comparison</div>
-            <div class="compare-values-grid">
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● STEP</span>
-                <span class="compare-number">${snap.step.facebook.toLocaleString()}</span>
-              </div>
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-innova">● INNOVA</span>
-                <span class="compare-number">${snap.innova.facebook.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="kpi-compare-box">
-            <div class="compare-card-title">Total Social Reach</div>
-            <div class="compare-values-grid">
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● STEP</span>
-                <span class="compare-number">${snap.step.social_total.toLocaleString()}</span>
-              </div>
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-innova">● INNOVA</span>
-                <span class="compare-number">${snap.innova.total.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="kpi-compare-box">
-            <div class="compare-card-title">Enterprise Database</div>
-            <div class="compare-values-grid">
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● CRM</span>
-                <span class="compare-number">${snap.step.contacts.toLocaleString()}</span>
-              </div>
-              <div class="compare-brand-col">
-                <span class="compare-brand-badge badge-step">● Email</span>
-                <span class="compare-number">${snap.step.subscribers.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-        `;
+        container.innerHTML =
+          compareCard('LinkedIn Comparison', 'STEP', 'badge-step', snap.step.linkedin.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.linkedin.toLocaleString()) +
+          compareCard('YouTube Comparison', 'STEP', 'badge-step', snap.step.youtube.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.youtube.toLocaleString()) +
+          compareCard('Instagram Comparison', 'STEP', 'badge-step', snap.step.instagram.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.instagram.toLocaleString()) +
+          compareCard('Facebook Comparison', 'STEP', 'badge-step', snap.step.facebook.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.facebook.toLocaleString()) +
+          compareCard('Total Social Reach', 'STEP', 'badge-step', snap.step.social_total.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.total.toLocaleString()) +
+          compareCard('Enterprise Database', 'CRM', 'badge-step', snap.step.contacts.toLocaleString(), 'Email', 'badge-step', snap.step.subscribers.toLocaleString());
       }
     }
 
@@ -1807,10 +1912,27 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     function getThemeColors() {
       const isDark = document.body.classList.contains('dark-mode');
       return {
-        grid: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-        tick: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.18)',
-        text: isDark ? '#8EABA0' : '#5C776B',
-        cardBg: isDark ? '#101E1A' : '#FFFFFF'
+        grid: isDark ? 'rgba(235, 244, 240, 0.07)' : 'rgba(22, 34, 29, 0.06)',
+        tick: isDark ? 'rgba(235, 244, 240, 0.24)' : 'rgba(22, 34, 29, 0.18)',
+        text: isDark ? '#A4BAB0' : '#43574E',
+        textStrong: isDark ? '#EDF2EF' : '#16221D',
+        border: isDark ? 'rgba(235, 244, 240, 0.14)' : 'rgba(22, 34, 29, 0.12)',
+        cardBg: isDark ? '#131D19' : '#FFFFFF'
+      };
+    }
+
+    function buildChartTooltip(colors) {
+      return {
+        backgroundColor: colors.cardBg,
+        titleColor: colors.textStrong,
+        bodyColor: colors.text,
+        borderColor: colors.border,
+        borderWidth: 1,
+        cornerRadius: 8,
+        padding: 10,
+        boxPadding: 5,
+        titleFont: { family: 'IBM Plex Sans', size: 12, weight: '600' },
+        bodyFont: { family: 'IBM Plex Sans', size: 12, weight: '500' }
       };
     }
 
@@ -1827,7 +1949,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       if (tip) tip.style.opacity = '0';
     }
 
-    function buildWeeklyXScale(labelCount, colors, fontSize = 9.5) {
+    function buildWeeklyXScale(labelCount, colors, fontSize = 10.5) {
       const isVertical = labelCount > 14;
       return {
         offset: false,
@@ -1839,7 +1961,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         },
         ticks: {
           color: colors.text,
-          font: { family: 'Inter', size: fontSize, weight: '500' },
+          font: { family: 'IBM Plex Mono', size: fontSize, weight: '500' },
           autoSkip: false,
           minRotation: isVertical ? 90 : 0,
           maxRotation: isVertical ? 90 : 0,
@@ -1951,7 +2073,9 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       }
     }
 
-    function createLineDataset(key, label, data, color, isDashed = false, isFilled = false) {
+    function createLineDataset(key, label, data, color, isDashed = false, isFilled = false, colors = null, labelCount = 40) {
+      const c = colors || getThemeColors();
+      const ptRadius = labelCount > 20 ? 2.4 : 3.5;
       return {
         key: key,
         label: label,
@@ -1959,16 +2083,16 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         borderColor: color,
         backgroundColor: isFilled ? 'rgba(19, 117, 71, 0.08)' : 'transparent',
         fill: isFilled,
-        borderWidth: 2.6,
+        borderWidth: 2.1,
         borderDash: isDashed ? [5, 4] : undefined,
         tension: 0.28,
         spanGaps: true,
-        pointRadius: 4,
-        pointHoverRadius: 7,
-        pointBackgroundColor: '#FFFFFF',
+        pointRadius: ptRadius,
+        pointHoverRadius: 6,
+        pointBackgroundColor: c.cardBg,
         pointBorderColor: color,
-        pointBorderWidth: 2,
-        pointHoverBorderWidth: 3,
+        pointBorderWidth: 1.75,
+        pointHoverBorderWidth: 2.5,
         pointHoverBackgroundColor: color
       };
     }
@@ -1981,19 +2105,20 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const [start, end] = periodSlices[currentPeriod] || [0, DATA.timeline.length];
       const sliceLabels = DATA.labels.slice(start, end);
-      syncMobileChartScroll('growthChartBox', 'growthSwipeHint', 'weekly-scrollable', sliceLabels.length > 14);
+      const count = sliceLabels.length;
+      syncMobileChartScroll('growthChartBox', 'growthSwipeHint', 'weekly-scrollable', count > 14);
       const colors = getThemeColors();
 
       let datasets = [];
 
       if (currentBrand === 'step') {
         const allStepDatasets = [
-          createLineDataset('linkedin', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), '#137547', false, true),
-          createLineDataset('youtube', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), '#C5A059'),
-          createLineDataset('instagram', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), '#52B788'),
-          createLineDataset('facebook', 'STEP Facebook', DATA.channels['STEP Facebook'].slice(start, end), '#2D6A4F'),
-          createLineDataset('contacts', 'CRM Contacts', DATA.channels['STEP Contacts'].slice(start, end), '#B29A4B', true),
-          createLineDataset('subscribers', 'Subscribers', DATA.channels['STEP Total Subscribers'].slice(start, end), '#74C69D', true)
+          createLineDataset('linkedin', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), '#137547', false, true, colors, count),
+          createLineDataset('youtube', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), '#C5A059', false, false, colors, count),
+          createLineDataset('instagram', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), '#52B788', false, false, colors, count),
+          createLineDataset('facebook', 'STEP Facebook', DATA.channels['STEP Facebook'].slice(start, end), '#2D6A4F', false, false, colors, count),
+          createLineDataset('contacts', 'CRM Contacts', DATA.channels['STEP Contacts'].slice(start, end), '#B29A4B', true, false, colors, count),
+          createLineDataset('subscribers', 'Subscribers', DATA.channels['STEP Total Subscribers'].slice(start, end), '#74C69D', true, false, colors, count)
         ];
 
         if (activeChannelChip === 'all channels' || activeChannelChip === 'all') {
@@ -2004,10 +2129,10 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
       } else if (currentBrand === 'innova') {
         const allInnovaDatasets = [
-          createLineDataset('linkedin', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), '#B29A4B', false, true),
-          createLineDataset('instagram', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), '#E07A5F'),
-          createLineDataset('youtube', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), '#C5A059'),
-          createLineDataset('facebook', 'Innova Facebook', DATA.channels['Innova Facebook'].slice(start, end), '#3D405B')
+          createLineDataset('linkedin', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), '#B29A4B', false, true, colors, count),
+          createLineDataset('instagram', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), '#E07A5F', false, false, colors, count),
+          createLineDataset('youtube', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), '#C5A059', false, false, colors, count),
+          createLineDataset('facebook', 'Innova Facebook', DATA.channels['Innova Facebook'].slice(start, end), '#3D405B', false, false, colors, count)
         ];
 
         if (activeChannelChip === 'all') {
@@ -2018,12 +2143,12 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
       } else if (currentBrand === 'compare') {
         const allCompareDatasets = [
-          createLineDataset('step_li', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), '#137547', false, true),
-          createLineDataset('innova_li', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), '#B29A4B', true),
-          createLineDataset('step_yt', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), '#52B788'),
-          createLineDataset('innova_yt', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), '#D4AF37', true),
-          createLineDataset('step_ig', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), '#2D6A4F'),
-          createLineDataset('innova_ig', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), '#E07A5F', true)
+          createLineDataset('step_li', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), '#137547', false, true, colors, count),
+          createLineDataset('innova_li', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), '#B29A4B', true, false, colors, count),
+          createLineDataset('step_yt', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), '#52B788', false, false, colors, count),
+          createLineDataset('innova_yt', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), '#D4AF37', true, false, colors, count),
+          createLineDataset('step_ig', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), '#2D6A4F', false, false, colors, count),
+          createLineDataset('innova_ig', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), '#E07A5F', true, false, colors, count)
         ];
 
         if (activeChannelChip === 'all shared' || activeChannelChip === 'all') {
@@ -2043,33 +2168,26 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: { padding: { left: 6, right: 6, top: 4, bottom: 2 } },
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: {
               position: 'top',
               labels: {
-                boxWidth: 12,
-                boxHeight: 12,
-                font: { family: 'Inter', size: 11, weight: '600' },
+                boxWidth: 11,
+                boxHeight: 11,
+                padding: 14,
+                font: { family: 'IBM Plex Sans', size: 12, weight: '500' },
                 color: colors.text
               }
             },
-            tooltip: {
-              backgroundColor: colors.cardBg,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: 'rgba(0,0,0,0.1)',
-              borderWidth: 1,
-              padding: 10,
-              boxPadding: 4,
-              bodyFont: { family: 'Inter', size: 11 }
-            }
+            tooltip: buildChartTooltip(colors)
           },
           scales: {
-            x: buildWeeklyXScale(sliceLabels.length, colors, 9.5),
+            x: buildWeeklyXScale(count, colors, 10.5),
             y: {
               grid: { color: colors.grid },
-              ticks: { color: colors.text, font: { size: 10 } }
+              ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } }
             }
           }
         }
@@ -2094,9 +2212,9 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         const totalNum = document.getElementById('donutTotalNumber');
         if (totalNum) totalNum.textContent = snap.step.social_total.toLocaleString();
         const totalLbl = document.getElementById('donutTotalLabel');
-        if (totalLbl) totalLbl.textContent = 'STEP Reach';
+        if (totalLbl) totalLbl.textContent = 'STEP reach';
         const sub = document.getElementById('donutCardSubtitle');
-        if (sub) sub.textContent = 'Active Channels Snapshot';
+        if (sub) sub.textContent = 'Active channels snapshot';
       } else if (currentBrand === 'innova') {
         labels = ['LinkedIn', 'Instagram', 'YouTube', 'Facebook'];
         data = [snap.innova.linkedin, snap.innova.instagram, snap.innova.youtube, snap.innova.facebook];
@@ -2104,9 +2222,9 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         const totalNum = document.getElementById('donutTotalNumber');
         if (totalNum) totalNum.textContent = snap.innova.total.toLocaleString();
         const totalLbl = document.getElementById('donutTotalLabel');
-        if (totalLbl) totalLbl.textContent = 'Innova Reach';
+        if (totalLbl) totalLbl.textContent = 'Innova reach';
         const sub = document.getElementById('donutCardSubtitle');
-        if (sub) sub.textContent = 'Channels Footprint';
+        if (sub) sub.textContent = 'Channels footprint';
       } else if (currentBrand === 'compare') {
         labels = ['STEP Social', 'Innova Social'];
         data = [snap.step.social_total, snap.innova.total];
@@ -2116,7 +2234,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         const totalLbl = document.getElementById('donutTotalLabel');
         if (totalLbl) totalLbl.textContent = 'Combined';
         const sub = document.getElementById('donutCardSubtitle');
-        if (sub) sub.textContent = 'Benchmark Footprint';
+        if (sub) sub.textContent = 'Benchmark footprint';
       }
 
       distributionDonut = new Chart(ctx, {
@@ -2145,7 +2263,6 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
       });
 
-      // Build custom legend
       const legWrap = document.getElementById('donutCustomLegend');
       if (legWrap) {
         legWrap.innerHTML = '';
@@ -2155,7 +2272,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           const pct = total ? ((val / total) * 100).toFixed(1) : 0;
           const div = document.createElement('div');
           div.className = 'custom-legend-item';
-          div.innerHTML = `<span class="legend-color-dot" style="background:${bgColors[i]};"></span><strong>${lb}</strong>: ${val.toLocaleString()} (${pct}%)`;
+          div.innerHTML = `<span class="legend-color-dot" style="background:${bgColors[i]};"></span><span><strong>${lb}</strong>: ${val.toLocaleString()} (${pct}%)</span>`;
           legWrap.appendChild(div);
         });
       }
@@ -2169,32 +2286,35 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const colors = getThemeColors();
       const sub = DATA.subscribers_deepdive;
-      syncMobileChartScroll('subscriberTrendBox', 'subSwipeHint', 'weekly-scrollable', sub.labels.length > 14);
+      const count = sub.labels.length;
+      syncMobileChartScroll('subscriberTrendBox', 'subSwipeHint', 'weekly-scrollable', count > 14);
 
       subscriberTrendChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: sub.labels,
           datasets: [
-            createLineDataset('healthy', 'Healthy Contacts', sub.healthy, '#137547', false, true),
-            createLineDataset('passive', 'Passive Contacts', sub.passive, '#B29A4B'),
-            createLineDataset('unengaged', 'Unengaged Contacts', sub.unengaged, '#C5A059'),
-            createLineDataset('inactive', 'Inactive Contacts', sub.inactive, '#8C7335', true)
+            createLineDataset('healthy', 'Healthy Contacts', sub.healthy, '#137547', false, true, colors, count),
+            createLineDataset('passive', 'Passive Contacts', sub.passive, '#B29A4B', false, false, colors, count),
+            createLineDataset('unengaged', 'Unengaged Contacts', sub.unengaged, '#C5A059', false, false, colors, count),
+            createLineDataset('inactive', 'Inactive Contacts', sub.inactive, '#8C7335', true, false, colors, count)
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: { padding: { left: 6, right: 6, top: 4, bottom: 2 } },
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: {
               position: 'top',
-              labels: { boxWidth: 10, font: { size: 10.5, weight: '600' }, color: colors.text }
-            }
+              labels: { boxWidth: 11, boxHeight: 11, padding: 12, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' }, color: colors.text }
+            },
+            tooltip: buildChartTooltip(colors)
           },
           scales: {
-            x: buildWeeklyXScale(sub.labels.length, colors, 9),
-            y: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 9.5 } } }
+            x: buildWeeklyXScale(count, colors, 10),
+            y: { grid: { color: colors.grid }, ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } } }
           }
         }
       });
@@ -2251,7 +2371,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           const pct = total ? ((val / total) * 100).toFixed(1) : 0;
           const div = document.createElement('div');
           div.className = 'custom-legend-item';
-          div.innerHTML = `<span class="legend-color-dot" style="background:${bgColors[i]};"></span><strong>${lb}</strong>: ${val.toLocaleString()} (${pct}%)`;
+          div.innerHTML = `<span class="legend-color-dot" style="background:${bgColors[i]};"></span><span><strong>${lb}</strong>: ${val.toLocaleString()} (${pct}%)</span>`;
           legWrap.appendChild(div);
         });
       }
@@ -2278,7 +2398,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const statsEl = document.getElementById('webinarHeaderStats');
       if (statsEl) {
-        statsEl.textContent = `${periodRegTotal.toLocaleString()} Registrations • ${periodPartTotal.toLocaleString()} Live Participants`;
+        statsEl.textContent = `${periodRegTotal.toLocaleString()} registrations • ${periodPartTotal.toLocaleString()} live participants`;
       }
 
       webinarMonthlyChart = new Chart(ctx, {
@@ -2290,7 +2410,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
               type: 'bar',
               label: 'Registrations',
               data: slicedReg,
-              backgroundColor: 'rgba(19, 117, 71, 0.4)',
+              backgroundColor: 'rgba(19, 117, 71, 0.36)',
               borderColor: '#137547',
               borderWidth: 1,
               borderRadius: 4,
@@ -2315,7 +2435,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
               borderWidth: 2,
               tension: 0.25,
               pointRadius: 3,
-              pointBackgroundColor: '#FFFFFF',
+              pointBackgroundColor: colors.cardBg,
               pointBorderColor: '#52B788',
               yAxisID: 'y1'
             }
@@ -2324,29 +2444,32 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: { padding: { left: 6, right: 6, top: 4, bottom: 2 } },
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: {
               position: 'top',
-              labels: { boxWidth: 10, font: { size: 10.5, weight: '600' }, color: colors.text }
-            }
+              labels: { boxWidth: 11, boxHeight: 11, padding: 12, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' }, color: colors.text }
+            },
+            tooltip: buildChartTooltip(colors)
           },
           scales: {
-            x: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 10 } } },
+            x: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } } },
             y: {
               grid: { color: colors.grid },
-              ticks: { color: colors.text, font: { size: 10 } },
-              title: { display: true, text: 'Attendees', color: colors.text, font: { size: 10 } }
+              ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } },
+              title: { display: true, text: 'Attendees', color: colors.text, font: { family: 'IBM Plex Sans', size: 11 } }
             },
             y1: {
               position: 'right',
               grid: { drawOnChartArea: false },
               ticks: {
+                padding: 6,
                 color: colors.text,
-                font: { size: 10 },
+                font: { family: 'IBM Plex Mono', size: 11 },
                 callback: function(v) { return v + '%'; }
               },
-              title: { display: true, text: 'Turnout %', color: colors.text, font: { size: 10 } }
+              title: { display: true, text: 'Turnout %', color: colors.text, font: { family: 'IBM Plex Sans', size: 11 } }
             }
           }
         }
@@ -2384,15 +2507,17 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: { padding: { left: 6, right: 6, top: 4, bottom: 2 } },
           plugins: {
             legend: {
               position: 'top',
-              labels: { boxWidth: 10, font: { size: 10.5, weight: '600' }, color: colors.text }
-            }
+              labels: { boxWidth: 11, boxHeight: 11, padding: 12, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' }, color: colors.text }
+            },
+            tooltip: buildChartTooltip(colors)
           },
           scales: {
-            x: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 10 } } },
-            y: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 10 } } }
+            x: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' } } },
+            y: { grid: { color: colors.grid }, ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } } }
           }
         }
       });
@@ -2408,7 +2533,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const isCsv = lowerName.endsWith('.csv');
 
       if (!isExcel && !isCsv) {
-        showToast('⚠️ Unsupported file format: ' + fileName + '. Please upload an .xlsx, .xls, or .csv file.', 'warning');
+        showToast('Unsupported file format: ' + fileName + '. Please use .xlsx, .xls, or .csv', 'warning');
         return;
       }
 
@@ -2416,7 +2541,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       if (isExcel) {
         if (typeof XLSX === 'undefined') {
-          showToast('⚠️ SheetJS library is still loading, please retry in a moment or upload a CSV file.', 'warning');
+          showToast('SheetJS library is still loading; please retry or use a CSV file', 'warning');
           return;
         }
         reader.onload = function(e) {
@@ -2435,7 +2560,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
             processParsedMatrix(rows, fileName, true);
           } catch (err) {
             console.error(err);
-            showToast('⚠️ Error parsing Excel: ' + err.message, 'error');
+            showToast('Error parsing Excel: ' + err.message, 'error');
           }
         };
         reader.readAsArrayBuffer(file);
@@ -2447,7 +2572,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
             processParsedMatrix(rows, fileName, true);
           } catch (err) {
             console.error(err);
-            showToast('⚠️ Error parsing CSV: ' + err.message, 'error');
+            showToast('Error parsing CSV: ' + err.message, 'error');
           }
         };
         reader.readAsText(file);
@@ -2484,7 +2609,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
     function processParsedMatrix(rows, fileName, showToastFlag = false) {
       if (!rows || rows.length < 3) {
-        if (showToastFlag) showToast('⚠️ The uploaded file contains insufficient data rows.', 'warning');
+        if (showToastFlag) showToast('The uploaded file contains insufficient data rows', 'warning');
         return;
       }
 
@@ -2536,7 +2661,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       }
 
       if (newTimeline.length === 0) {
-        if (showToastFlag) showToast('⚠️ No weekly timeline columns found in the sheet.', 'warning');
+        if (showToastFlag) showToast('No weekly timeline columns found in the sheet', 'warning');
         return;
       }
 
@@ -2794,7 +2919,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       refreshAllCharts();
 
       if (showToastFlag && fileName !== 'Google Sheet (Live)') {
-        showToast('✓ Successfully updated dashboard from "' + fileName + '" (' + newTimeline.length + ' operating weeks synced)!', 'success');
+        showToast('Updated dashboard from "' + fileName + '" (' + newTimeline.length + ' operating weeks synced)', 'success');
       }
     }
 
