@@ -1145,12 +1145,12 @@
       }
 
       .chart-canvas-box.weekly-scrollable {
-        min-width: 780px;
+        min-width: 840px;
         height: 295px;
       }
 
       .chart-canvas-box-tall.weekly-scrollable {
-        min-width: 600px;
+        min-width: 640px;
         height: 295px;
       }
 
@@ -1264,10 +1264,10 @@
             <span id="syncText">Sync Live Sheet</span>
           </button>
 
-          <!-- Download Raw Data File Button -->
-          <button class="btn-header-action btn-download" onclick="downloadRawDataCSV()" id="btnDownloadRaw" title="Download raw KPI CSV data file">
+          <!-- Export KPI CSV Button -->
+          <button class="btn-header-action btn-download" onclick="downloadRawDataCSV()" id="btnDownloadRaw" title="Export KPI dataset as CSV">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Raw Data</span>
+            <span>Export CSV</span>
           </button>
 
           <!-- Light / Dark Icon Toggle -->
@@ -1541,10 +1541,10 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 
-        showToast('Raw data downloaded (' + filename + ')', 'success');
+        showToast('KPI dataset exported (' + filename + ')', 'success');
       } catch (err) {
-        console.error('Download failed:', err);
-        showToast('Could not download raw data file: ' + err.message, 'error');
+        console.error('Export failed:', err);
+        showToast('Could not export CSV file: ' + err.message, 'error');
       }
     }
 
@@ -1708,6 +1708,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       }
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) themeMeta.setAttribute('content', isDark ? '#111A17' : '#137547');
+      renderCurrentKPIs();
       refreshAllCharts();
     }
 
@@ -1801,12 +1802,13 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const snap = getCurrentSnapshot();
       const container = document.getElementById('kpiContainer');
       if (!container) return;
+      const pal = getChartPalette(document.body.classList.contains('dark-mode'));
 
-      const singleCard = (name, value, tagline, gold = false) => `
-        <div class="kpi-box${gold ? ' gold-accent' : ''}">
+      const singleCard = (name, value, tagline, dotColor = pal.pine) => `
+        <div class="kpi-box">
           <div class="kpi-label-row">
             <span class="kpi-name">${name}</span>
-            <span class="kpi-dot" aria-hidden="true"></span>
+            <span class="kpi-dot" style="background:${dotColor};" aria-hidden="true"></span>
           </div>
           <div class="kpi-number">${value}</div>
           <div class="kpi-tagline">${tagline}</div>
@@ -1831,20 +1833,20 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       if (currentBrand === 'step') {
         container.innerHTML =
-          singleCard('STEP LinkedIn', snap.step.linkedin.toLocaleString(), 'Network followers', true) +
-          singleCard('STEP YouTube', snap.step.youtube.toLocaleString(), 'Video subscribers', true) +
-          singleCard('STEP Instagram', snap.step.instagram.toLocaleString(), 'Community followers') +
-          singleCard('STEP Facebook', snap.step.facebook.toLocaleString(), 'Page followers') +
-          singleCard('CRM Contacts', snap.step.contacts.toLocaleString(), 'Enterprise database') +
-          singleCard('Email Subscribers', snap.step.subscribers.toLocaleString(), 'Newsletter reach');
+          singleCard('STEP LinkedIn', snap.step.linkedin.toLocaleString(), 'Network followers', pal.pine) +
+          singleCard('STEP YouTube', snap.step.youtube.toLocaleString(), 'Video subscribers', pal.terracotta) +
+          singleCard('STEP Instagram', snap.step.instagram.toLocaleString(), 'Community followers', pal.mulberry) +
+          singleCard('STEP Facebook', snap.step.facebook.toLocaleString(), 'Page followers', pal.amber) +
+          singleCard('CRM Contacts', snap.step.contacts.toLocaleString(), 'Enterprise database', pal.cobalt) +
+          singleCard('Email Subscribers', snap.step.subscribers.toLocaleString(), 'Newsletter reach', pal.teal);
       } else if (currentBrand === 'innova') {
         container.innerHTML =
-          singleCard('Innova LinkedIn', snap.innova.linkedin.toLocaleString(), 'Network followers', true) +
-          singleCard('Innova Instagram', snap.innova.instagram.toLocaleString(), 'Visual audience') +
-          singleCard('Innova YouTube', snap.innova.youtube.toLocaleString(), 'Subscribers') +
-          singleCard('Innova Facebook', snap.innova.facebook.toLocaleString(), 'Page followers') +
-          singleCard('Total Innova Audience', snap.innova.total.toLocaleString(), 'Cross-platform reach', true) +
-          singleCard('Active Channels', '4', 'Multi-channel network');
+          singleCard('Innova LinkedIn', snap.innova.linkedin.toLocaleString(), 'Network followers', pal.gold) +
+          singleCard('Innova Instagram', snap.innova.instagram.toLocaleString(), 'Visual audience', pal.terracotta) +
+          singleCard('Innova YouTube', snap.innova.youtube.toLocaleString(), 'Subscribers', pal.cobalt) +
+          singleCard('Innova Facebook', snap.innova.facebook.toLocaleString(), 'Page followers', pal.teal) +
+          singleCard('Total Innova Audience', snap.innova.total.toLocaleString(), 'Cross-platform reach', pal.gold) +
+          singleCard('Active Channels', '4', 'Multi-channel network', pal.pine);
       } else if (currentBrand === 'compare') {
         container.innerHTML =
           compareCard('LinkedIn Comparison', 'STEP', 'badge-step', snap.step.linkedin.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.linkedin.toLocaleString()) +
@@ -1852,7 +1854,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           compareCard('Instagram Comparison', 'STEP', 'badge-step', snap.step.instagram.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.instagram.toLocaleString()) +
           compareCard('Facebook Comparison', 'STEP', 'badge-step', snap.step.facebook.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.facebook.toLocaleString()) +
           compareCard('Total Social Reach', 'STEP', 'badge-step', snap.step.social_total.toLocaleString(), 'INNOVA', 'badge-innova', snap.innova.total.toLocaleString()) +
-          compareCard('Enterprise Database', 'CRM', 'badge-step', snap.step.contacts.toLocaleString(), 'Email', 'badge-step', snap.step.subscribers.toLocaleString());
+          compareCard('Enterprise Database', 'CRM', 'badge-step', snap.step.contacts.toLocaleString(), 'Email', 'badge-innova', snap.step.subscribers.toLocaleString());
       }
     }
 
@@ -1877,6 +1879,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
     function getThemeColors() {
       const isDark = document.body.classList.contains('dark-mode');
       return {
+        isDark: isDark,
         grid: isDark ? 'rgba(235, 244, 240, 0.07)' : 'rgba(22, 34, 29, 0.06)',
         tick: isDark ? 'rgba(235, 244, 240, 0.24)' : 'rgba(22, 34, 29, 0.18)',
         text: isDark ? '#A4BAB0' : '#43574E',
@@ -1886,7 +1889,36 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       };
     }
 
-    function buildChartTooltip(colors) {
+    // Distinct, colorblind-friendly categorical palette per chart context
+    function getChartPalette(isDark) {
+      return isDark ? {
+        pine: '#28A76E',
+        pineFill: 'rgba(40, 167, 110, 0.12)',
+        terracotta: '#F07157',
+        cobalt: '#60A5FA',
+        cobaltFill: 'rgba(96, 165, 250, 0.12)',
+        teal: '#22D3EE',
+        mulberry: '#E06C97',
+        amber: '#E6B349',
+        gold: '#D6B25E',
+        goldFill: 'rgba(214, 178, 94, 0.12)',
+        crimson: '#F07167'
+      } : {
+        pine: '#137547',
+        pineFill: 'rgba(19, 117, 71, 0.08)',
+        terracotta: '#D95338',
+        cobalt: '#2563EB',
+        cobaltFill: 'rgba(37, 99, 235, 0.08)',
+        teal: '#0891B2',
+        mulberry: '#9E3B6B',
+        amber: '#C58B1E',
+        gold: '#B28A2E',
+        goldFill: 'rgba(178, 138, 46, 0.09)',
+        crimson: '#C44536'
+      };
+    }
+
+    function buildChartTooltip(colors, rawLabels = null) {
       return {
         backgroundColor: colors.cardBg,
         titleColor: colors.textStrong,
@@ -1896,8 +1928,20 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         cornerRadius: 8,
         padding: 10,
         boxPadding: 5,
+        usePointStyle: true,
         titleFont: { family: 'IBM Plex Sans', size: 12, weight: '600' },
-        bodyFont: { family: 'IBM Plex Sans', size: 12, weight: '500' }
+        bodyFont: { family: 'IBM Plex Sans', size: 12, weight: '500' },
+        callbacks: {
+          title: function(items) {
+            if (!items || !items.length) return '';
+            const idx = items[0].dataIndex;
+            return (rawLabels && rawLabels[idx]) ? rawLabels[idx] : items[0].label;
+          },
+          label: function(ctx) {
+            const val = ctx.parsed && ctx.parsed.y !== null && ctx.parsed.y !== undefined ? Number(ctx.parsed.y).toLocaleString() : ctx.formattedValue;
+            return ' ' + ctx.dataset.label + ': ' + val;
+          }
+        }
       };
     }
 
@@ -1914,25 +1958,39 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       if (tip) tip.style.opacity = '0';
     }
 
-    function buildWeeklyXScale(labelCount, colors, fontSize = 10.5) {
-      const isVertical = labelCount > 14;
+    function buildWeeklyXScale(rawLabels, colors) {
+      const labelCount = rawLabels.length;
+      const isCompactQuarter = labelCount <= 14;
       return {
         offset: false,
         grid: {
           color: colors.grid,
           drawTicks: true,
-          tickLength: 6,
+          tickLength: 5,
           tickColor: colors.tick
         },
         ticks: {
           color: colors.text,
-          font: { family: 'IBM Plex Mono', size: fontSize, weight: '500' },
+          font: { family: 'IBM Plex Sans', size: isCompactQuarter ? 11 : 10, weight: '500' },
           autoSkip: false,
-          minRotation: isVertical ? 90 : 0,
-          maxRotation: isVertical ? 90 : 0,
+          minRotation: 0,
+          maxRotation: 0,
           align: 'center',
           crossAlign: 'near',
-          padding: 4
+          padding: 6,
+          callback: function(value, index) {
+            const raw = String(rawLabels[index] || this.getLabelForValue(value) || '');
+            if (isCompactQuarter) return raw;
+            const parts = raw.split(' ');
+            const month = parts[0] || '';
+            const week = parts[1] || raw;
+            const prevParts = index > 0 ? String(rawLabels[index - 1] || '').split(' ') : [];
+            const prevMonth = prevParts[0] || '';
+            if (index === 0 || month !== prevMonth) {
+              return [week, month];
+            }
+            return week;
+          }
         }
       };
     }
@@ -2038,26 +2096,26 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       }
     }
 
-    function createLineDataset(key, label, data, color, isDashed = false, isFilled = false, colors = null, labelCount = 40) {
+    function createLineDataset(key, label, data, color, isDashed = false, fillColor = null, colors = null, labelCount = 40) {
       const c = colors || getThemeColors();
-      const ptRadius = labelCount > 20 ? 2.4 : 3.5;
+      const ptRadius = labelCount > 20 ? 2.6 : 3.8;
       return {
         key: key,
         label: label,
         data: data,
         borderColor: color,
-        backgroundColor: isFilled ? 'rgba(19, 117, 71, 0.08)' : 'transparent',
-        fill: isFilled,
+        backgroundColor: fillColor || 'transparent',
+        fill: !!fillColor,
         borderWidth: 2.1,
         borderDash: isDashed ? [5, 4] : undefined,
         tension: 0.28,
         spanGaps: true,
         pointRadius: ptRadius,
         pointHoverRadius: 6,
-        pointBackgroundColor: c.cardBg,
-        pointBorderColor: color,
-        pointBorderWidth: 1.75,
-        pointHoverBorderWidth: 2.5,
+        pointBackgroundColor: color,
+        pointBorderColor: c.cardBg,
+        pointBorderWidth: 1.5,
+        pointHoverBorderWidth: 2,
         pointHoverBackgroundColor: color
       };
     }
@@ -2073,17 +2131,18 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       const count = sliceLabels.length;
       syncMobileChartScroll('growthChartBox', 'growthSwipeHint', 'weekly-scrollable', count > 14);
       const colors = getThemeColors();
+      const pal = getChartPalette(colors.isDark);
 
       let datasets = [];
 
       if (currentBrand === 'step') {
         const allStepDatasets = [
-          createLineDataset('linkedin', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), '#137547', false, true, colors, count),
-          createLineDataset('youtube', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), '#C5A059', false, false, colors, count),
-          createLineDataset('instagram', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), '#52B788', false, false, colors, count),
-          createLineDataset('facebook', 'STEP Facebook', DATA.channels['STEP Facebook'].slice(start, end), '#2D6A4F', false, false, colors, count),
-          createLineDataset('contacts', 'CRM Contacts', DATA.channels['STEP Contacts'].slice(start, end), '#B29A4B', true, false, colors, count),
-          createLineDataset('subscribers', 'Subscribers', DATA.channels['STEP Total Subscribers'].slice(start, end), '#74C69D', true, false, colors, count)
+          createLineDataset('linkedin', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), pal.pine, false, pal.pineFill, colors, count),
+          createLineDataset('contacts', 'CRM Contacts', DATA.channels['STEP Contacts'].slice(start, end), pal.cobalt, true, null, colors, count),
+          createLineDataset('subscribers', 'Subscribers', DATA.channels['STEP Total Subscribers'].slice(start, end), pal.teal, true, null, colors, count),
+          createLineDataset('youtube', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), pal.terracotta, false, null, colors, count),
+          createLineDataset('instagram', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), pal.mulberry, false, null, colors, count),
+          createLineDataset('facebook', 'STEP Facebook', DATA.channels['STEP Facebook'].slice(start, end), pal.amber, false, null, colors, count)
         ];
 
         if (activeChannelChip === 'all channels' || activeChannelChip === 'all') {
@@ -2094,10 +2153,10 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
       } else if (currentBrand === 'innova') {
         const allInnovaDatasets = [
-          createLineDataset('linkedin', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), '#B29A4B', false, true, colors, count),
-          createLineDataset('instagram', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), '#E07A5F', false, false, colors, count),
-          createLineDataset('youtube', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), '#C5A059', false, false, colors, count),
-          createLineDataset('facebook', 'Innova Facebook', DATA.channels['Innova Facebook'].slice(start, end), '#3D405B', false, false, colors, count)
+          createLineDataset('linkedin', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), pal.gold, false, pal.goldFill, colors, count),
+          createLineDataset('instagram', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), pal.terracotta, false, null, colors, count),
+          createLineDataset('youtube', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), pal.cobalt, false, null, colors, count),
+          createLineDataset('facebook', 'Innova Facebook', DATA.channels['Innova Facebook'].slice(start, end), pal.teal, false, null, colors, count)
         ];
 
         if (activeChannelChip === 'all') {
@@ -2108,12 +2167,12 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         }
       } else if (currentBrand === 'compare') {
         const allCompareDatasets = [
-          createLineDataset('step_li', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), '#137547', false, true, colors, count),
-          createLineDataset('innova_li', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), '#B29A4B', true, false, colors, count),
-          createLineDataset('step_yt', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), '#52B788', false, false, colors, count),
-          createLineDataset('innova_yt', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), '#D4AF37', true, false, colors, count),
-          createLineDataset('step_ig', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), '#2D6A4F', false, false, colors, count),
-          createLineDataset('innova_ig', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), '#E07A5F', true, false, colors, count)
+          createLineDataset('step_li', 'STEP LinkedIn', DATA.channels['STEP LinkedIn'].slice(start, end), pal.pine, false, pal.pineFill, colors, count),
+          createLineDataset('innova_li', 'Innova LinkedIn', DATA.channels['Innova LinkedIn'].slice(start, end), pal.amber, true, null, colors, count),
+          createLineDataset('step_yt', 'STEP YouTube', DATA.channels['STEP YouTube'].slice(start, end), pal.terracotta, false, null, colors, count),
+          createLineDataset('innova_yt', 'Innova YouTube', DATA.channels['Innova YouTube'].slice(start, end), pal.cobalt, true, null, colors, count),
+          createLineDataset('step_ig', 'STEP Instagram', DATA.channels['STEP Instagram'].slice(start, end), pal.mulberry, false, null, colors, count),
+          createLineDataset('innova_ig', 'Innova Instagram', DATA.channels['Innova Instagram'].slice(start, end), pal.teal, true, null, colors, count)
         ];
 
         if (activeChannelChip === 'all shared' || activeChannelChip === 'all') {
@@ -2139,20 +2198,22 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
             legend: {
               position: 'top',
               labels: {
-                boxWidth: 11,
-                boxHeight: 11,
-                padding: 14,
+                usePointStyle: true,
+                pointStyle: 'circle',
+                boxWidth: 8,
+                boxHeight: 8,
+                padding: 16,
                 font: { family: 'IBM Plex Sans', size: 12, weight: '500' },
                 color: colors.text
               }
             },
-            tooltip: buildChartTooltip(colors)
+            tooltip: buildChartTooltip(colors, sliceLabels)
           },
           scales: {
-            x: buildWeeklyXScale(count, colors, 10.5),
+            x: buildWeeklyXScale(sliceLabels, colors),
             y: {
               grid: { color: colors.grid },
-              ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } }
+              ticks: { padding: 8, color: colors.text, font: { family: 'IBM Plex Sans', size: 11, weight: '500' } }
             }
           }
         }
@@ -2168,12 +2229,13 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const snap = getCurrentSnapshot();
       const colors = getThemeColors();
+      const pal = getChartPalette(colors.isDark);
       let labels = [], data = [], bgColors = [];
 
       if (currentBrand === 'step') {
         labels = ['LinkedIn', 'YouTube', 'Instagram', 'Facebook'];
         data = [snap.step.linkedin, snap.step.youtube, snap.step.instagram, snap.step.facebook];
-        bgColors = ['#137547', '#C5A059', '#52B788', '#2D6A4F'];
+        bgColors = [pal.pine, pal.terracotta, pal.mulberry, pal.amber];
         const totalNum = document.getElementById('donutTotalNumber');
         if (totalNum) totalNum.textContent = snap.step.social_total.toLocaleString();
         const totalLbl = document.getElementById('donutTotalLabel');
@@ -2183,7 +2245,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       } else if (currentBrand === 'innova') {
         labels = ['LinkedIn', 'Instagram', 'YouTube', 'Facebook'];
         data = [snap.innova.linkedin, snap.innova.instagram, snap.innova.youtube, snap.innova.facebook];
-        bgColors = ['#B29A4B', '#E07A5F', '#C5A059', '#3D405B'];
+        bgColors = [pal.gold, pal.terracotta, pal.cobalt, pal.teal];
         const totalNum = document.getElementById('donutTotalNumber');
         if (totalNum) totalNum.textContent = snap.innova.total.toLocaleString();
         const totalLbl = document.getElementById('donutTotalLabel');
@@ -2193,7 +2255,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       } else if (currentBrand === 'compare') {
         labels = ['STEP Social', 'Innova Social'];
         data = [snap.step.social_total, snap.innova.total];
-        bgColors = ['#137547', '#B29A4B'];
+        bgColors = [pal.pine, pal.gold];
         const totalNum = document.getElementById('donutTotalNumber');
         if (totalNum) totalNum.textContent = (snap.step.social_total + snap.innova.total).toLocaleString();
         const totalLbl = document.getElementById('donutTotalLabel');
@@ -2210,7 +2272,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
             data: data,
             backgroundColor: bgColors,
             borderColor: colors.cardBg,
-            borderWidth: 2,
+            borderWidth: 2.5,
             hoverOffset: 4
           }]
         },
@@ -2250,6 +2312,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       if (subscriberTrendChart) subscriberTrendChart.destroy();
 
       const colors = getThemeColors();
+      const pal = getChartPalette(colors.isDark);
       const sub = DATA.subscribers_deepdive;
       const count = sub.labels.length;
       syncMobileChartScroll('subscriberTrendBox', 'subSwipeHint', 'weekly-scrollable', count > 14);
@@ -2259,10 +2322,10 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
         data: {
           labels: sub.labels,
           datasets: [
-            createLineDataset('healthy', 'Healthy Contacts', sub.healthy, '#137547', false, true, colors, count),
-            createLineDataset('passive', 'Passive Contacts', sub.passive, '#B29A4B', false, false, colors, count),
-            createLineDataset('unengaged', 'Unengaged Contacts', sub.unengaged, '#C5A059', false, false, colors, count),
-            createLineDataset('inactive', 'Inactive Contacts', sub.inactive, '#8C7335', true, false, colors, count)
+            createLineDataset('healthy', 'Healthy Contacts', sub.healthy, pal.pine, false, pal.pineFill, colors, count),
+            createLineDataset('passive', 'Passive Contacts', sub.passive, pal.amber, false, null, colors, count),
+            createLineDataset('unengaged', 'Unengaged Contacts', sub.unengaged, pal.cobalt, false, null, colors, count),
+            createLineDataset('inactive', 'Inactive Contacts', sub.inactive, pal.crimson, true, null, colors, count)
           ]
         },
         options: {
@@ -2273,13 +2336,21 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           plugins: {
             legend: {
               position: 'top',
-              labels: { boxWidth: 11, boxHeight: 11, padding: 12, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' }, color: colors.text }
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'circle',
+                boxWidth: 8,
+                boxHeight: 8,
+                padding: 14,
+                font: { family: 'IBM Plex Sans', size: 12, weight: '500' },
+                color: colors.text
+              }
             },
-            tooltip: buildChartTooltip(colors)
+            tooltip: buildChartTooltip(colors, sub.labels)
           },
           scales: {
-            x: buildWeeklyXScale(count, colors, 10),
-            y: { grid: { color: colors.grid }, ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } } }
+            x: buildWeeklyXScale(sub.labels, colors),
+            y: { grid: { color: colors.grid }, ticks: { padding: 8, color: colors.text, font: { family: 'IBM Plex Sans', size: 11, weight: '500' } } }
           }
         }
       });
@@ -2294,9 +2365,10 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const snap = getCurrentSnapshot();
       const colors = getThemeColors();
+      const pal = getChartPalette(colors.isDark);
       const labels = ['Healthy', 'Passive', 'Unengaged', 'Inactive'];
       const data = [snap.step.healthy, snap.step.passive, snap.step.unengaged, snap.step.inactive];
-      const bgColors = ['#137547', '#52B788', '#B29A4B', '#8C7335'];
+      const bgColors = [pal.pine, pal.amber, pal.cobalt, pal.crimson];
 
       const total = data.reduce((a, b) => a + b, 0);
       const centerNum = document.getElementById('subDonutCenterNumber');
@@ -2310,7 +2382,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
             data: data,
             backgroundColor: bgColors,
             borderColor: colors.cardBg,
-            borderWidth: 2,
+            borderWidth: 2.5,
             hoverOffset: 4
           }]
         },
@@ -2349,6 +2421,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
       if (webinarMonthlyChart) webinarMonthlyChart.destroy();
 
       const colors = getThemeColors();
+      const pal = getChartPalette(colors.isDark);
       const web = DATA.webinars_monthly;
       const [mStart, mEnd] = web.quarter_ranges[currentPeriod] || [0, 11];
 
@@ -2375,9 +2448,9 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
               type: 'bar',
               label: 'Registrations',
               data: slicedReg,
-              backgroundColor: 'rgba(19, 117, 71, 0.36)',
-              borderColor: '#137547',
-              borderWidth: 1,
+              backgroundColor: colors.isDark ? 'rgba(40, 167, 110, 0.34)' : 'rgba(19, 117, 71, 0.28)',
+              borderColor: pal.pine,
+              borderWidth: 1.5,
               borderRadius: 4,
               yAxisID: 'y'
             },
@@ -2385,8 +2458,8 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
               type: 'bar',
               label: 'Live Attendees',
               data: slicedPart,
-              backgroundColor: '#C5A059',
-              borderColor: '#B29A4B',
+              backgroundColor: pal.amber,
+              borderColor: pal.gold,
               borderWidth: 1,
               borderRadius: 4,
               yAxisID: 'y'
@@ -2395,13 +2468,14 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
               type: 'line',
               label: 'Turnout %',
               data: slicedRates,
-              borderColor: '#52B788',
+              borderColor: pal.cobalt,
               backgroundColor: 'transparent',
-              borderWidth: 2,
+              borderWidth: 2.2,
               tension: 0.25,
-              pointRadius: 3,
-              pointBackgroundColor: colors.cardBg,
-              pointBorderColor: '#52B788',
+              pointRadius: 3.5,
+              pointBackgroundColor: pal.cobalt,
+              pointBorderColor: colors.cardBg,
+              pointBorderWidth: 1.5,
               yAxisID: 'y1'
             }
           ]
@@ -2414,27 +2488,35 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           plugins: {
             legend: {
               position: 'top',
-              labels: { boxWidth: 11, boxHeight: 11, padding: 12, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' }, color: colors.text }
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'circle',
+                boxWidth: 8,
+                boxHeight: 8,
+                padding: 14,
+                font: { family: 'IBM Plex Sans', size: 12, weight: '500' },
+                color: colors.text
+              }
             },
-            tooltip: buildChartTooltip(colors)
+            tooltip: buildChartTooltip(colors, slicedMonths)
           },
           scales: {
-            x: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } } },
+            x: { grid: { color: colors.grid }, ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Sans', size: 11, weight: '500' } } },
             y: {
               grid: { color: colors.grid },
-              ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } },
-              title: { display: true, text: 'Attendees', color: colors.text, font: { family: 'IBM Plex Sans', size: 11 } }
+              ticks: { padding: 8, color: colors.text, font: { family: 'IBM Plex Sans', size: 11, weight: '500' } },
+              title: { display: true, text: 'Attendees', color: colors.text, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' } }
             },
             y1: {
               position: 'right',
               grid: { drawOnChartArea: false },
               ticks: {
-                padding: 6,
+                padding: 8,
                 color: colors.text,
-                font: { family: 'IBM Plex Mono', size: 11 },
+                font: { family: 'IBM Plex Sans', size: 11, weight: '500' },
                 callback: function(v) { return v + '%'; }
               },
-              title: { display: true, text: 'Turnout %', color: colors.text, font: { family: 'IBM Plex Sans', size: 11 } }
+              title: { display: true, text: 'Turnout %', color: colors.text, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' } }
             }
           }
         }
@@ -2449,6 +2531,7 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
 
       const snap = getCurrentSnapshot();
       const colors = getThemeColors();
+      const pal = getChartPalette(colors.isDark);
 
       benchmarkChart = new Chart(ctx, {
         type: 'bar',
@@ -2458,13 +2541,13 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
             {
               label: 'STEP',
               data: [snap.step.linkedin, snap.step.youtube, snap.step.instagram, snap.step.facebook],
-              backgroundColor: '#137547',
+              backgroundColor: pal.pine,
               borderRadius: 4
             },
             {
               label: 'InnovaBeyond',
               data: [snap.innova.linkedin, snap.innova.youtube, snap.innova.instagram, snap.innova.facebook],
-              backgroundColor: '#B29A4B',
+              backgroundColor: pal.gold,
               borderRadius: 4
             }
           ]
@@ -2476,13 +2559,21 @@ let DATA = {"timeline": [{"month": "January", "week": "W1", "label": "Jan W1"}, 
           plugins: {
             legend: {
               position: 'top',
-              labels: { boxWidth: 11, boxHeight: 11, padding: 12, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' }, color: colors.text }
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'circle',
+                boxWidth: 8,
+                boxHeight: 8,
+                padding: 14,
+                font: { family: 'IBM Plex Sans', size: 12, weight: '500' },
+                color: colors.text
+              }
             },
-            tooltip: buildChartTooltip(colors)
+            tooltip: buildChartTooltip(colors, ['LinkedIn', 'YouTube', 'Instagram', 'Facebook'])
           },
           scales: {
-            x: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { family: 'IBM Plex Sans', size: 11.5, weight: '500' } } },
-            y: { grid: { color: colors.grid }, ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Mono', size: 11 } } }
+            x: { grid: { color: colors.grid }, ticks: { padding: 6, color: colors.text, font: { family: 'IBM Plex Sans', size: 12, weight: '500' } } },
+            y: { grid: { color: colors.grid }, ticks: { padding: 8, color: colors.text, font: { family: 'IBM Plex Sans', size: 11, weight: '500' } } }
           }
         }
       });
